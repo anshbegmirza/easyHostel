@@ -1,0 +1,322 @@
+# Sheet 1: AEIOU Summary
+
+## Project
+
+Hostel / PG Management System
+Product direction: sellable platform for multiple hostels / PGs (multi-hostel ready)
+Tech stack: Angular 19+ (PWA — installable on phone), Node.js backend, MySQL
+
+## A - Activities
+
+New tenant registration and profile creation
+Room search, room allocation, and room change
+Monthly fee payment and receipt generation
+Complaint submission, tracking, and resolution
+Admin monitoring of occupancy, dues, and notices
+
+### General observations
+
+Most tasks are repetitive and time-bound
+Delays happen due to manual registers and calls
+Users prefer mobile-friendly and quick workflows
+
+### Elements / special notes
+
+Fast forms, clear status tags, and instant alerts are critical
+Real-time occupancy and fee status reduce confusion
+Installable PWA so tenants use it like a phone app without Play Store
+
+## E - Environment
+
+Hostel reception, manager office, and student rooms
+Shared physical environment with high daily traffic
+Mix of digital and paper-based operations in many hostels
+
+### Environment features
+
+Front desk handles registration and queries
+Notice board is common communication point
+Payment and complaint handling often happens in office hours
+
+### Scenes
+
+Admission season (high load)
+Monthly fee week (peak transaction volume)
+Maintenance issue hours (urgent complaint handling)
+
+## I - Interactions
+
+Tenant <-> Admin: registration, fees, complaints
+Admin <-> Warden/Staff: maintenance and approvals
+Parent/Guardian <-> Admin: fee and safety queries
+
+### How interactions happen
+
+In-person discussion, phone calls, chat, and web/app portal
+System-generated status updates reduce repeated follow-ups
+Tenant primarily uses installable PWA on mobile; admin uses desktop or tablet
+
+### Special notes
+
+Transparent communication improves trust
+Audit trail of every action is important
+
+## O - Objects
+
+Tenant records
+Room records and occupancy map
+Fee ledger, receipts, and due alerts
+Complaint tickets and resolution logs
+Role-based dashboards and reports
+
+### Inventory notes
+
+Master data: rooms, beds, pricing, policies
+Transactional data: admissions, payments, complaints
+Evidence data: images/documents for complaints and identity
+
+## U - Users
+
+Tenant / Student
+Admin / Hostel manager
+Warden / Maintenance staff
+Parent / Guardian (limited visibility)
+
+### Roles in context
+
+Tenant: self-service actions and tracking
+Admin: control and approvals
+Staff: operational execution
+
+### User scene summary
+
+Needs are speed, clarity, safety, and accountability
+Product should support both daily operations and peak periods
+
+
+# Sheet 2: Empathy Mapping
+
+## Primary User
+
+Tenant / Student living in hostel or PG
+
+## Stakeholders
+
+- Hostel owner / admin
+- Warden and maintenance staff
+- Parents/guardians
+- Accounting/support team
+
+## User Activities
+
+- Register and upload details
+- Check available rooms and confirm booking
+- Pay fees and download receipts
+- Raise complaints and track status
+- Receive notices and reminders
+- Install PWA on phone for quick daily access
+
+## Storyboard (Short Flow)
+
+1. User searches for room and registers.
+2. Admin verifies details and allocates room.
+3. User pays fee and gets confirmation.
+4. User raises maintenance complaint when needed.
+5. Staff resolves issue; user receives update.
+
+## What User Says
+
+- "I want quick room booking."
+- "I need clear fee details and due dates."
+- "I should not chase admin for complaint updates."
+- "I want an app on my phone without downloading from a store."
+
+## What User Thinks
+
+- "Is my payment safely recorded?"
+- "Will my issue be solved on time?"
+- "Can I trust room and facility information?"
+
+## What User Does
+
+- Uses phone first for most actions
+- Checks reminders near due dates
+- Contacts admin if status is unclear
+
+## What User Feels
+
+### Happy Moments
+
+- Fast registration and room confirmation
+- Simple payment process with instant receipt
+- Timely complaint closure
+- One-tap open from home screen (installed PWA)
+
+### Sad / Pain Moments
+
+- Delay in room allocation
+- Unclear dues or duplicate payment confusion
+- No response on complaints
+
+## Empathy Insights
+
+- Users value speed, transparency, and safety
+- Trust increases when updates are real-time
+- Simple UI and status tracking matter most
+
+
+# Sheet 3: Ideation Canvas
+
+## Activities
+
+Tenant onboarding and verification
+Smart room allocation
+Fee collection and due tracking
+Complaint management and closure
+Admin analytics and reporting
+
+## Situation / Context / Location
+
+City hostels and PGs with medium to high occupancy
+Manual operations cause delays and data mismatch
+Users need 24x7 access to basic services
+Same product can be offered to many hostels as a paid service
+
+## What / When / Why / Where
+
+What: A digital platform for hostel operations (marketable multi-hostel product)
+When: Daily use; peak load during admissions and month-end fees
+Why: Reduce manual errors, improve transparency, and save time; owners pay for operational control
+Where: Installable PWA on student phones; web dashboard on office desktop
+
+## Props / Tools / Objects / Equipment
+
+Angular 19+ frontend (tenant + admin portals) with PWA support
+Node.js backend with secure REST APIs
+MySQL database for structured records
+Notification service (email/SMS/WhatsApp optional)
+Role-based access, logs, and analytics
+
+## Core Idea Directions
+
+Self-service tenant workflow
+Admin-first control panel with automation
+Priority-based complaint routing
+Data-driven occupancy and revenue tracking
+Per-hostel isolation so the same product can serve many customers
+
+## Best Idea (Selected)
+
+Unified Hostel Management Platform: one sellable system to manage registration, room allocation, fees, complaints, and admin decisions — with role-based access, installable PWA for mobile, and real-time status visibility — deployable for different hostels / PGs.
+
+
+# Sheet 4: Product Development Canvas
+
+## Purpose
+
+Build a reliable digital system for hostel/PG operations
+Solve manual errors, communication delays, and unclear records
+Serve a real need with scalable workflows
+Position as a product that can be sold / licensed to multiple hostels
+
+## Product Experience
+
+User should feel clarity, control, and trust
+Admin should feel efficiency and decision confidence
+Tenant should feel convenience, safety, and transparency
+Hostel owner should feel they bought a ready operations tool, not a custom one-off
+
+## Product Functions
+
+Register and verify tenants
+Allocate and manage rooms
+Track fees, dues, and receipts
+Manage complaints with status timeline
+Provide role-based dashboard and reports
+
+## Product Features
+
+Secure login and role-based permissions
+Tenant profile management with document support
+Room matrix (available/occupied/maintenance)
+Fee reminders, payment history, and receipt download
+Complaint ticketing with priority and SLA status
+Dashboard cards: occupancy, revenue, pending complaints
+Installable PWA (Add to Home Screen on phone; works like a mobile app)
+
+## People
+
+Tenant / student (primary user)
+Admin / hostel manager (primary operator)
+Warden / support staff (execution role)
+Parent/guardian (informational stakeholder)
+Product buyer: hostel / PG owner (paying customer)
+
+## Components
+
+Angular 19+ frontend (tenant + admin portals) with PWA / service worker
+Node.js backend (auth, business logic, APIs)
+MySQL (users, rooms, fees, complaints, logs; hostel-scoped data for multi-customer sale)
+JWT auth, validation, and activity audit logs
+Notification integration layer (optional)
+
+## Customer Revalidation
+
+Run pilot with one hostel block
+Collect feedback on speed, ease, and error rate
+Validate if features match real daily workflows
+Confirm owner would pay (pricing / what they value most) before scaling to many hostels
+
+## Reject, Redesign, Retain
+
+Reject: low-value or rarely used screens; native store apps unless demand is proven
+Redesign: confusing forms and long admin steps
+Retain: fast flows, clear statuses, trusted reports, installable PWA
+Repeat improvement after each feedback cycle
+
+
+# Sheet 5: Scale Strategy (One Hostel Now, Many Later)
+
+## Decision
+
+Ship a solid product for ONE hostel first.
+Design data and code as if MANY hostels will share the same system later.
+Do NOT build billing, signup-of-hostels, or super-admin SaaS UI in v1.
+
+## Rule
+
+Every business row belongs to a hostel.
+Always filter by hostel_id in APIs and queries.
+v1: seed exactly one hostel; all users/rooms/fees/complaints attach to it.
+v2: add more hostel rows — same code, no rewrite.
+
+## Core tables (hostel-scoped)
+
+hostels (id, name, address, settings…)
+users (…, hostel_id, role)
+rooms (…, hostel_id)
+allocations (…, hostel_id)
+fees / payments (…, hostel_id)
+complaints (…, hostel_id)
+notices (…, hostel_id)
+
+JWT carries: user_id, role, hostel_id
+Never trust hostel_id from the client body alone — take it from the logged-in user.
+
+## What v1 includes
+
+One hostel record in seed data
+Full tenant / admin / staff flows for that hostel
+hostel_id on all scoped tables and in auth context
+
+## What waits until someone pays (v2+)
+
+Create/manage multiple hostels
+Cross-hostel super-admin
+Per-hostel branding / custom domain
+Subscriptions and invoices between you and owners
+
+## Why this works
+
+One hostel demo is complete and sellable as a pilot.
+Adding hostel #2 becomes data + auth scope, not a new project.

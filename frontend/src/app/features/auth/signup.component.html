@@ -1,0 +1,83 @@
+<div class="main-area__grid mat-app-background">
+  <div class="main-area__login">
+    <div class="inner-area__grid">
+      <div class="inner-area__top">
+        <div class="login-info">
+          <p class="mode-chip">{{ appConfig.config().mode === 'test' ? 'Test' : 'Live' }}</p>
+          <h1 class="app-title">Create access</h1>
+        </div>
+      </div>
+
+      <div class="inner-area__middle">
+        <mat-card class="login-card" appearance="outlined">
+          <div class="login-card__content">
+            <p class="lede">{{ appConfig.config().signupHint }}</p>
+
+            <div class="path">
+              <mat-icon color="primary">admin_panel_settings</mat-icon>
+              <div>
+                <h2>Created by superuser</h2>
+                <p>
+                  An admin creates your email/password account. Then you log in on the
+                  login screen — there is no public password registration.
+                </p>
+              </div>
+            </div>
+
+            <div class="path">
+              <mat-icon color="primary">account_circle</mat-icon>
+              <div>
+                <h2>Sign up with Google</h2>
+                <p>Use your Google account. First visit creates your tenant profile.</p>
+              </div>
+            </div>
+
+            @if (error()) {
+              <p class="form-error" role="alert">{{ error() }}</p>
+            }
+
+            <button
+              mat-flat-button
+              color="primary"
+              class="login-card__action"
+              type="button"
+              [disabled]="loading() || !appConfig.config().googleEnabled"
+              (click)="continueWithGoogle()"
+            >
+              @if (loading()) {
+                <mat-spinner diameter="20"></mat-spinner>
+              }
+              <mat-icon>login</mat-icon>
+              <span>Continue with Google</span>
+            </button>
+
+            <a mat-stroked-button routerLink="/login" class="login-card__action">
+              Back to login
+            </a>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="inner-area__bottom">
+        <button mat-button type="button" (click)="theme.toggleColorMode()">
+          <mat-icon>{{ theme.colorMode() === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
+          {{ theme.colorMode() === 'light' ? 'Dark' : 'Light' }} theme
+        </button>
+        <p class="version">Version {{ appConfig.config().version }}</p>
+      </div>
+    </div>
+  </div>
+
+  <aside class="main-area__image">
+    <div class="knowledge">
+      <div class="knowledge__content">
+        <figure class="quote">
+          <blockquote>
+            <p>{{ appConfig.config().coverQuote }}</p>
+          </blockquote>
+          <figcaption>— {{ appConfig.config().coverQuoteAuthor }}</figcaption>
+        </figure>
+      </div>
+    </div>
+  </aside>
+</div>

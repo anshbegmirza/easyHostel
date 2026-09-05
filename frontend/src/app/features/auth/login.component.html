@@ -1,0 +1,103 @@
+<div class="main-area__grid mat-app-background">
+  <div class="main-area__login">
+    <div class="inner-area__grid">
+      <div class="inner-area__top">
+        <div class="login-info">
+          <p class="mode-chip">{{ appConfig.config().mode === 'test' ? 'Test' : 'Live' }}</p>
+          <h1 class="app-title">{{ appConfig.config().appName }}</h1>
+        </div>
+      </div>
+
+      <div class="inner-area__middle">
+        <mat-card class="login-card" appearance="outlined">
+          <div class="login-card__content">
+            <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+              @if (error()) {
+                <p class="form-error" role="alert">{{ error() }}</p>
+              }
+
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Username</mat-label>
+                <input matInput type="text" formControlName="username" autocomplete="username" />
+                @if (form.controls.username.touched && form.controls.username.invalid) {
+                  <mat-error>Username is required</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Password</mat-label>
+                <input
+                  matInput
+                  type="password"
+                  formControlName="password"
+                  autocomplete="current-password"
+                />
+                @if (form.controls.password.touched && form.controls.password.invalid) {
+                  <mat-error>Password is required</mat-error>
+                }
+              </mat-form-field>
+
+              <div class="login-options">
+                <mat-slide-toggle color="primary" formControlName="remember">
+                  Remember me
+                </mat-slide-toggle>
+              </div>
+
+              <button
+                mat-flat-button
+                color="primary"
+                class="login-card__action"
+                type="submit"
+                [disabled]="form.invalid || loading()"
+              >
+                @if (loading()) {
+                  <mat-spinner diameter="20"></mat-spinner>
+                }
+                <span>Log in</span>
+              </button>
+            </form>
+
+            <div class="divider"><span>or</span></div>
+
+            <button
+              mat-stroked-button
+              type="button"
+              class="login-card__action google-btn"
+              [disabled]="loading() || !appConfig.config().googleEnabled"
+              (click)="continueWithGoogle()"
+            >
+              <mat-icon>login</mat-icon>
+              Continue with Google
+            </button>
+
+            <p class="signup-link">
+              New here?
+              <a routerLink="/signup">See how to get an account</a>
+            </p>
+          </div>
+        </mat-card>
+      </div>
+
+      <div class="inner-area__bottom">
+        <button mat-button type="button" (click)="theme.toggleColorMode()">
+          <mat-icon>{{ theme.colorMode() === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
+          {{ theme.colorMode() === 'light' ? 'Dark' : 'Light' }} theme
+        </button>
+        <p class="version">Version {{ appConfig.config().version }}</p>
+      </div>
+    </div>
+  </div>
+
+  <aside class="main-area__image" aria-hidden="false">
+    <div class="knowledge">
+      <div class="knowledge__content">
+        <figure class="quote">
+          <blockquote>
+            <p>{{ appConfig.config().coverQuote }}</p>
+          </blockquote>
+          <figcaption>— {{ appConfig.config().coverQuoteAuthor }}</figcaption>
+        </figure>
+      </div>
+    </div>
+  </aside>
+</div>

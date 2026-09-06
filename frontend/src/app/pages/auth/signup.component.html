@@ -28,7 +28,10 @@
               <mat-icon color="primary">account_circle</mat-icon>
               <div>
                 <h2>Sign up with Google</h2>
-                <p>Use your Google account. First visit creates your tenant profile.</p>
+                <p>
+                  Use your Google account. First visit creates a <strong>tenant</strong>
+                  on this hostel (partner via X-Hostel-Partner). Roles can be promoted later.
+                </p>
               </div>
             </div>
 
@@ -36,20 +39,24 @@
               <p class="form-error" role="alert">{{ error() }}</p>
             }
 
-            <button
-              mat-flat-button
-              color="primary"
-              class="login-card__action"
-              type="button"
-              [disabled]="loading() || !appConfig.config().googleEnabled"
-              (click)="continueWithGoogle()"
-            >
-              @if (loading()) {
-                <mat-spinner diameter="20"></mat-spinner>
-              }
-              <mat-icon>login</mat-icon>
-              <span>Continue with Google</span>
-            </button>
+            @if (useRealGoogle()) {
+              <div #googleBtnHost class="google-host"></div>
+            } @else {
+              <button
+                mat-flat-button
+                color="primary"
+                class="login-card__action"
+                type="button"
+                [disabled]="loading() || !appConfig.config().googleEnabled"
+                (click)="continueWithGoogleTest()"
+              >
+                @if (loading()) {
+                  <mat-spinner diameter="20"></mat-spinner>
+                }
+                <mat-icon>login</mat-icon>
+                <span>Continue with Google (test)</span>
+              </button>
+            }
 
             <a mat-stroked-button routerLink="/login" class="login-card__action">
               Back to login

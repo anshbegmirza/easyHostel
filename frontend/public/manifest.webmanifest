@@ -1,7 +1,7 @@
 {
-  "name": "Hostel Management",
-  "short_name": "Hostel",
-  "theme_color": "#1b7a4e",
+  "name": "easyHostel4",
+  "short_name": "easyHostel4",
+  "theme_color": "#7b1fa2",
   "background_color": "#ffffff",
   "display": "standalone",
   "scope": "./",

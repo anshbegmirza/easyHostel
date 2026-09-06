@@ -2,9 +2,9 @@
 
 ## Project
 
-Hostel / PG Management System
+Hostel / PG Management System (easyHostel4)
 Product direction: sellable platform for multiple hostels / PGs (multi-hostel ready)
-Tech stack: Angular 19+ (PWA — installable on phone), Node.js backend, MySQL
+Tech stack: Angular 19+ (PWA — installable on phone), Node.js backend (/api/v1), MySQL
 
 ## A - Activities
 

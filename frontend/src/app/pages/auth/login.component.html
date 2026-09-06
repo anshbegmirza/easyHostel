@@ -59,16 +59,20 @@
 
             <div class="divider"><span>or</span></div>
 
-            <button
-              mat-stroked-button
-              type="button"
-              class="login-card__action google-btn"
-              [disabled]="loading() || !appConfig.config().googleEnabled"
-              (click)="continueWithGoogle()"
-            >
-              <mat-icon>login</mat-icon>
-              Continue with Google
-            </button>
+            @if (useRealGoogle()) {
+              <div #googleBtnHost class="google-host"></div>
+            } @else {
+              <button
+                mat-stroked-button
+                type="button"
+                class="login-card__action google-btn"
+                [disabled]="loading() || !appConfig.config().googleEnabled"
+                (click)="continueWithGoogleTest()"
+              >
+                <mat-icon>login</mat-icon>
+                Continue with Google (test)
+              </button>
+            }
 
             <p class="signup-link">
               New here?

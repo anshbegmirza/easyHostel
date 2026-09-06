@@ -82,14 +82,16 @@ HOSTEL MANAGEMENT SYSTEM/
 
 **Goal:** Login works; every request knows `hostel_id`.
 
-- Finalize `schema.sql`: `hostels`, `users`, `rooms`, `allocations`, `fees`, `payments`, `complaints` (+ timeline if needed)
-- All business tables have `hostel_id`
-- `seed.sql`: **one** hostel, admin / staff / tenant demo accounts
-- JWT auth: register/login; token payload includes `user_id`, `role`, `hostel_id`
-- Middleware: require auth; never trust client-sent `hostel_id` alone
-- Angular: login page, auth guard, HTTP interceptor, role-aware redirect
+- [x] Finalize `schema.sql` with hostel partner + users + stub tables
+- [x] Seed: hogwarts + superuser / staff1 / student1
+- [x] JWT auth from MySQL; token has userId, role, hostelId
+- [x] Middleware: resolveHostel (`X-Hostel-Partner`), requireAuth
+- [x] Angular: Works4-style api-prefix + error interceptors, auth guards
+- [x] Google GIS + test fallback; Google users are tenants
+- [x] API under `/api/v1`
+- [ ] MySQL must be running locally + `npm run db:setup` on your machine
 
-**Exit check:** three roles can log in; API rejects unauthenticated calls.
+**Exit check:** three roles can log in; API rejects unauthenticated calls (`/api/v1/secure/ping`).
 
 ---
 

@@ -2,12 +2,13 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../../core/auth/auth.service';
-import { AppConfigService } from '../../core/config/app-config.service';
-import { ThemeService } from '../../core/theme/theme.service';
+import { AuthService } from '../core/authentication/auth.service';
+import { AppConfigService } from '../core/config/app-config.service';
+import { ThemeService } from '../core/theme/theme.service';
+import { HostelContextService } from '../core/hostel/hostel-context.service';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-shell-home',
   imports: [MatCardModule, MatButtonModule, MatIconModule],
   template: `
     <div class="home">
@@ -15,12 +16,16 @@ import { ThemeService } from '../../core/theme/theme.service';
         <mat-card-header>
           <mat-card-title>{{ appConfig.config().appName }}</mat-card-title>
           <mat-card-subtitle>
-            Signed in as {{ auth.user()?.name }} ({{ auth.user()?.role }}) ·
-            {{ appConfig.config().mode }} / {{ theme.colorMode() }}
+            {{ auth.user()?.name }} ({{ auth.user()?.role }}) · partner
+            {{ hostel.partner() }} · {{ appConfig.config().mode }} /
+            {{ theme.colorMode() }}
           </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          <p>Auth scaffold is ready. Next phases add rooms, fees, and complaints.</p>
+          <p>
+            Phase 1 complete: MySQL auth, /api/v1, Works4-style interceptors, Google
+            tenant signup. Rooms / fees / complaints come next.
+          </p>
         </mat-card-content>
         <mat-card-actions>
           <button mat-button type="button" (click)="theme.toggleColorMode()">
@@ -41,12 +46,13 @@ import { ThemeService } from '../../core/theme/theme.service';
       background: var(--color-bg);
     }
     mat-card {
-      width: min(100%, 28rem);
+      width: min(100%, 32rem);
     }
   `,
 })
-export class HomeComponent {
+export class ShellHomeComponent {
   readonly auth = inject(AuthService);
   readonly appConfig = inject(AppConfigService);
   readonly theme = inject(ThemeService);
+  readonly hostel = inject(HostelContextService);
 }

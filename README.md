@@ -1,90 +1,80 @@
-# Hostel Management System
+# easyHostel4
 
 Digital platform for hostel / PG operations: registration, rooms, fees, complaints, and role-based dashboards.
 
-**v1:** one hostel, full product  
-**Later:** same codebase, more hostels via `hostel_id` (see `docs/information.txt` Sheet 5)
+**v1:** one hostel (partner `hogwarts`), full product foundation  
+**Later:** `hogwarts.easyHostel4.com`-style tenancy via hostel partner / subdomain
 
 ## Stack
 
 | Layer | Choice |
 |--------|--------|
-| Frontend | Angular 19+ (PWA, installable on phone) |
-| Backend | Node.js + Express |
-| Database | MySQL |
-| Theme | Light: green + white · Dark: green + black (Works4-style light/dark switch) |
+| Frontend | Angular 19+ (PWA), Angular Material M2 themes |
+| Backend | Node.js + Express (`/api/v1`) |
+| Database | MySQL (`hostel_mgmt`) |
+| Theme | Test: purple · Live/prod: green (from `APP_MODE`) |
 
 ## Repo layout
 
 ```text
-frontend/   → Angular app
+frontend/   → Angular app (Works4-like core/http + pages)
 backend/    → Express API
-docs/       → research + PLAN.md
-README.md   → this file
+docs/       → research, plan, test credentials
 ```
 
 ## Prerequisites
 
-- Node.js 20+ (npm)
-- MySQL Server (Community / XAMPP / WAMP) — needed from Phase 1
-- Angular CLI (optional globally; `npx` works)
+- Node.js 20+
+- MySQL Server running locally
 
-## Scripts
-
-From the repo root (PowerShell):
-
-```powershell
-.\clean-install.ps1   # delete both node_modules, reinstall
-.\start-test.ps1      # APP_MODE=test, open API + Angular windows
-```
-
-Git Bash / WSL:
-
-```bash
-bash ./clean-install.sh
-bash ./start-test.sh
-```
-
-## Quick start (manual)
-
-### Backend
+## Database setup
 
 ```bash
 cd backend
-cp .env.example .env   # Windows: copy .env.example .env
+copy .env.example .env   # set DB_PASSWORD if needed
 npm install
-npm run dev
+npm run db:setup
 ```
 
-API default: `http://localhost:3000`  
-Health: `GET http://localhost:3000/api/health`  
-Config (drives theme brand): `GET http://localhost:3000/api/config`
+Creates `hostel_mgmt`, schema, and seed users. See [`docs/test-credentials.txt`](docs/test-credentials.txt).
 
-`APP_MODE=test` → purple theme · `APP_MODE=prod` → green theme
+## Scripts
 
-### Frontend
+```powershell
+.\clean-install.ps1
+.\start-test.ps1
+```
+
+Or manually:
 
 ```bash
-cd frontend
-npm install
-npm start
+cd backend && npm run dev
+cd frontend && npm start
 ```
 
-App default: `http://localhost:4200`
+- API: `http://localhost:3000/api/v1`
+- App: `http://localhost:4200`
+- Hostel header: `X-Hostel-Partner: hogwarts` (frontend sends this automatically)
 
-### Test login
+## Auth
 
-- Username: `superuser`
-- Password: `test@123`
-- Or use **Continue with Google** (test dialog) / signup page
+- Local login for superuser-created accounts
+- Google Sign-In (GIS) when `GOOGLE_CLIENT_ID` is set; otherwise test Google dialog in `APP_MODE=test`
+- Google users are always **tenants** on the resolved hostel
 
-Signup is not open password registration — only superuser-created accounts or Google.
+### Google Cloud (Web client)
+
+1. OAuth consent screen (External) + test users while in Testing  
+2. Credentials → OAuth client ID → Web  
+3. Authorized JavaScript origins: `http://localhost:4200`  
+4. Put Client ID in `backend/.env` as `GOOGLE_CLIENT_ID=...` (never commit secrets)
+
+## Theme
+
+`APP_MODE=test` → purple · `APP_MODE=prod` → green
 
 ## Docs
 
-- [`docs/PLAN.md`](docs/PLAN.md) — 7-phase build plan  
-- [`docs/information.txt`](docs/information.txt) — AEIOU / product research  
-
-## Git
-
-Repo is not required to be initialized yet. Do not push until you create the remote and choose to.
+- [`docs/PLAN.md`](docs/PLAN.md)
+- [`docs/information.txt`](docs/information.txt)
+- [`docs/test-credentials.txt`](docs/test-credentials.txt)

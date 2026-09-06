@@ -1,125 +1,151 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { OAuth2Client } = require('google-auth-library');
+const { pool } = require('../../config/db');
+const { resolveHostel } = require('../../middleware/resolveHostel');
+const { requireAuth } = require('../../middleware/requireAuth');
+const { encodeId } = require('../../utils/publicId');
+const { publicUser, publicHostel } = require('../../utils/publicModels');
 
 const router = express.Router();
 
-/** ponytail: in-memory users until MySQL auth lands; ceiling = restart loses new Google users */
-const users = [
-  {
-    id: 1,
-    hostelId: 1,
-    username: 'superuser',
-    email: 'superuser@hostel.local',
-    name: 'Super Admin',
-    role: 'superuser',
-    // password: test@123
-    passwordHash: bcrypt.hashSync('test@123', 8),
-    authProvider: 'local',
-  },
-];
-
-function publicUser(u) {
-  return {
-    id: u.id,
-    username: u.username || null,
-    email: u.email,
-    name: u.name,
-    role: u.role,
-    hostelId: u.hostelId,
-    authProvider: u.authProvider,
-  };
-}
-
-function signToken(user) {
+function signToken(userRow) {
   return jwt.sign(
     {
-      userId: user.id,
-      role: user.role,
-      hostelId: user.hostelId,
+      userId: encodeId(userRow.id),
+      role: userRow.role,
+      hostelId: encodeId(userRow.hostel_id),
     },
     process.env.JWT_SECRET || 'change-me-in-production',
     { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
   );
 }
 
-/** Username/password login — only for accounts created by superuser (local). */
-router.post('/login', async (req, res) => {
-  const username = String(req.body?.username || req.body?.email || '')
-    .trim()
-    .toLowerCase();
-  const password = String(req.body?.password || '');
-
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Username and password are required.' });
-  }
-
-  const user = users.find(
-    (u) =>
-      u.authProvider === 'local' &&
-      (u.username === username || u.email === username)
+async function findLocalUser(hostelId, username) {
+  const [rows] = await pool.query(
+    `SELECT * FROM users
+     WHERE hostel_id = ?
+       AND auth_provider = 'local'
+       AND (LOWER(username) = ? OR LOWER(email) = ?)
+     LIMIT 1`,
+    [hostelId, username, username]
   );
-  if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
-    return res.status(401).json({ message: 'Incorrect username or password.' });
-  }
+  return rows[0] || null;
+}
 
-  return res.json({
-    token: signToken(user),
-    user: publicUser(user),
-  });
-});
+async function findByEmail(hostelId, email) {
+  const [rows] = await pool.query(
+    `SELECT * FROM users WHERE hostel_id = ? AND LOWER(email) = ? LIMIT 1`,
+    [hostelId, email]
+  );
+  return rows[0] || null;
+}
 
-/**
- * Google sign-in / sign-up.
- * Test (no GOOGLE_CLIENT_ID): accept { email, name } from the client test button.
- * Prod: send { idToken } — verification wired when client id is configured.
- */
-router.post('/google', async (req, res) => {
-  const clientId = process.env.GOOGLE_CLIENT_ID || '';
-  let email = '';
-  let name = '';
+async function findByGoogleSub(hostelId, googleSub) {
+  const [rows] = await pool.query(
+    `SELECT * FROM users WHERE hostel_id = ? AND google_sub = ? LIMIT 1`,
+    [hostelId, googleSub]
+  );
+  return rows[0] || null;
+}
 
-  if (clientId && req.body?.idToken) {
-    // ponytail: real token verify deferred; require email claim shape until google-auth-library added
-    return res.status(501).json({
-      message:
-        'Google token verification not configured yet. Unset GOOGLE_CLIENT_ID to use test Google login.',
+router.post('/login', resolveHostel, async (req, res, next) => {
+  try {
+    const username = String(req.body?.username || req.body?.email || '')
+      .trim()
+      .toLowerCase();
+    const password = String(req.body?.password || '');
+
+    if (!username || !password) {
+      return res.status(400).json({ message: 'Username and password are required.' });
+    }
+
+    const user = await findLocalUser(req.hostel.id, username);
+    if (!user || !user.password_hash) {
+      return res.status(401).json({ message: 'Incorrect username or password.' });
+    }
+
+    const ok = await bcrypt.compare(password, user.password_hash);
+    if (!ok) {
+      return res.status(401).json({ message: 'Incorrect username or password.' });
+    }
+
+    return res.json({
+      token: signToken(user),
+      user: publicUser(user),
+      hostel: publicHostel(req.hostel),
     });
+  } catch (err) {
+    return next(err);
   }
-
-  if (process.env.APP_MODE !== 'test' && !clientId) {
-    return res.status(503).json({ message: 'Google sign-in is not configured.' });
-  }
-
-  email = String(req.body?.email || '').trim().toLowerCase();
-  name = String(req.body?.name || 'Google User').trim();
-
-  if (!email || !email.includes('@')) {
-    return res.status(400).json({ message: 'A valid Google account email is required.' });
-  }
-
-  let user = users.find((u) => u.email === email);
-  if (!user) {
-    user = {
-      id: users.length + 1,
-      hostelId: 1,
-      username: email.split('@')[0],
-      email,
-      name,
-      role: 'tenant',
-      passwordHash: null,
-      authProvider: 'google',
-    };
-    users.push(user);
-  }
-
-  return res.json({
-    token: signToken(user),
-    user: publicUser(user),
-  });
 });
 
-/** Public signup with password is not allowed. */
+router.post('/google', resolveHostel, async (req, res, next) => {
+  try {
+    const clientId = String(process.env.GOOGLE_CLIENT_ID || '').trim();
+    const mode = process.env.APP_MODE === 'prod' ? 'prod' : 'test';
+
+    let email = '';
+    let name = '';
+    let googleSub = null;
+
+    if (req.body?.idToken && clientId) {
+      const client = new OAuth2Client(clientId);
+      const ticket = await client.verifyIdToken({
+        idToken: String(req.body.idToken),
+        audience: clientId,
+      });
+      const payload = ticket.getPayload();
+      email = String(payload.email || '').toLowerCase();
+      name = String(payload.name || payload.email || 'Google User');
+      googleSub = payload.sub || null;
+    } else if (mode === 'test') {
+      email = String(req.body?.email || '').trim().toLowerCase();
+      name = String(req.body?.name || 'Google User').trim();
+      googleSub = email ? `test:${email}` : null;
+    } else {
+      return res.status(503).json({ message: 'Google sign-in is not configured.' });
+    }
+
+    if (!email || !email.includes('@')) {
+      return res.status(400).json({ message: 'A valid Google account email is required.' });
+    }
+
+    let user = googleSub ? await findByGoogleSub(req.hostel.id, googleSub) : null;
+    if (!user) {
+      user = await findByEmail(req.hostel.id, email);
+    }
+
+    if (!user) {
+      const usernameBase = email.split('@')[0].slice(0, 60);
+      const [result] = await pool.query(
+        `INSERT INTO users
+          (hostel_id, username, email, name, password_hash, role, auth_provider, google_sub)
+         VALUES (?, ?, ?, ?, NULL, 'tenant', 'google', ?)`,
+        [req.hostel.id, usernameBase, email, name, googleSub]
+      );
+      const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [result.insertId]);
+      user = rows[0];
+    } else if (googleSub && !user.google_sub) {
+      await pool.query('UPDATE users SET google_sub = ?, auth_provider = ? WHERE id = ?', [
+        googleSub,
+        user.auth_provider === 'local' ? user.auth_provider : 'google',
+        user.id,
+      ]);
+      user.google_sub = googleSub;
+    }
+
+    return res.json({
+      token: signToken(user),
+      user: publicUser(user),
+      hostel: publicHostel(req.hostel),
+    });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 router.post('/register', (_req, res) => {
   res.status(403).json({
     message:
@@ -127,4 +153,29 @@ router.post('/register', (_req, res) => {
   });
 });
 
-module.exports = { authRouter: router, users };
+router.get('/me', requireAuth, resolveHostel, async (req, res, next) => {
+  try {
+    if (req.user.hostelId !== req.hostel.id) {
+      return res.status(403).json({
+        message: 'Token hostel does not match X-Hostel-Partner.',
+        code: 'HOSTEL_MISMATCH',
+      });
+    }
+
+    const [rows] = await pool.query('SELECT * FROM users WHERE id = ? AND hostel_id = ?', [
+      req.user.id,
+      req.hostel.id,
+    ]);
+    if (!rows.length) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+    return res.json({
+      user: publicUser(rows[0]),
+      hostel: publicHostel(req.hostel),
+    });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+module.exports = { authRouter: router };

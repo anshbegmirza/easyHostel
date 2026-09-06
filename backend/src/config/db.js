@@ -1,4 +1,4 @@
-image.pngconst mysql = require('mysql2/promise');
+const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 const pool = mysql.createPool({
@@ -17,7 +17,7 @@ async function pingDb() {
     await conn.ping();
   } finally {
     conn.release();
-  }image.png
+  }
 }
 
 module.exports = { pool, pingDb };

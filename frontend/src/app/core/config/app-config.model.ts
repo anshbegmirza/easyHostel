@@ -9,6 +9,7 @@ export interface AppConfig {
   version: string;
   googleClientId: string;
   googleEnabled: boolean;
+  defaultHostelPartner: string;
   coverQuote: string;
   coverQuoteAuthor: string;
   allowPasswordSignup: boolean;

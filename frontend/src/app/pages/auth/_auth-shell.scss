@@ -127,6 +127,13 @@ form {
   margin-right: 8px;
 }
 
+.google-host {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+}
+
 .google-btn {
   display: inline-flex;
   align-items: center;

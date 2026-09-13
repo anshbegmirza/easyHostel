@@ -1,0 +1,63 @@
+<section class="page-frame">
+  <div class="page-actionbar no-print">
+    <div class="page-actionbar__title">
+      <h1>Receipt</h1>
+      <p>Payment confirmation</p>
+    </div>
+    <div class="page-actionbar__actions">
+      <a mat-stroked-button routerLink="/fees">
+        <mat-icon>arrow_back</mat-icon>
+        Back
+      </a>
+      <button mat-flat-button color="primary" type="button" (click)="print()">
+        <mat-icon>print</mat-icon>
+        Print
+      </button>
+    </div>
+  </div>
+
+  <div class="page-body">
+  @if (loading()) {
+    <mat-spinner diameter="36" />
+  } @else {
+    @if (fee(); as f) {
+      <article class="detail-card receipt">
+        <h2>Payment receipt</h2>
+        <p class="hostel">{{ hostelName() }}</p>
+        <table class="kv">
+          <tr>
+            <th>Tenant</th>
+            <td>{{ f.tenant_name }}</td>
+          </tr>
+          <tr>
+            <th>Period</th>
+            <td>{{ f.period_label }}</td>
+          </tr>
+          <tr>
+            <th>Amount</th>
+            <td>₹{{ f.amount | number: '1.2-2' }}</td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td>{{ f.status }}</td>
+          </tr>
+          @if (payment(); as p) {
+            <tr>
+              <th>Paid at</th>
+              <td>{{ p.paid_at | date: 'medium' }}</td>
+            </tr>
+            <tr>
+              <th>Method</th>
+              <td>{{ p.method }}</td>
+            </tr>
+            <tr>
+              <th>Receipt id</th>
+              <td>{{ p.id }}</td>
+            </tr>
+          }
+        </table>
+      </article>
+    }
+  }
+  </div>
+</section>

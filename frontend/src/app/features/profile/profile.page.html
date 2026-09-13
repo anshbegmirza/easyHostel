@@ -1,0 +1,77 @@
+<section class="page-frame">
+  <div class="page-actionbar">
+    <div class="page-actionbar__title">
+      <h1>Profile</h1>
+      <p>Your account on this hostel</p>
+    </div>
+  </div>
+
+  <div class="page-body">
+    @if (auth.user(); as u) {
+      <div class="profile-layout">
+        <aside class="profile-rail">
+          <div class="profile-rail__avatar">{{ initials() }}</div>
+          <h2 class="profile-rail__name">{{ u.name }}</h2>
+          <p class="profile-rail__email">{{ u.email }}</p>
+          @if (u.status) {
+            <div class="profile-rail__status">
+              <app-status-icon [status]="u.status" />
+            </div>
+          }
+        </aside>
+
+        <div class="profile-main">
+          <div class="detail-card profile-card">
+            <h3 class="profile-card__title">Account</h3>
+            <ul class="info-list">
+              <li class="info-list__item">
+                <mat-icon class="info-list__icon">alternate_email</mat-icon>
+                <div>
+                  <div class="info-list__label">Username</div>
+                  <div class="info-list__value">{{ u.username || '—' }}</div>
+                </div>
+              </li>
+              <li class="info-list__item">
+                <mat-icon class="info-list__icon">badge</mat-icon>
+                <div>
+                  <div class="info-list__label">Role</div>
+                  <div class="info-list__value">{{ pretty(u.role) }}</div>
+                </div>
+              </li>
+              <li class="info-list__item">
+                <mat-icon class="info-list__icon">login</mat-icon>
+                <div>
+                  <div class="info-list__label">Sign-in</div>
+                  <div class="info-list__value">{{ pretty(u.auth_provider) }}</div>
+                </div>
+              </li>
+              <li class="info-list__item">
+                <mat-icon class="info-list__icon">apartment</mat-icon>
+                <div>
+                  <div class="info-list__label">Hostel</div>
+                  <div class="info-list__value">{{ hostel.partner() }}</div>
+                </div>
+              </li>
+              @if (u.phone) {
+                <li class="info-list__item">
+                  <mat-icon class="info-list__icon">call</mat-icon>
+                  <div>
+                    <div class="info-list__label">Phone</div>
+                    <div class="info-list__value">{{ u.phone }}</div>
+                  </div>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="table-card">
+        <div class="empty-state">
+          <mat-icon>person_off</mat-icon>
+          <div>No profile loaded.</div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

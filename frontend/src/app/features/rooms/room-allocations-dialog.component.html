@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Allocations · {{ data.room.code }}</h2>
+<mat-dialog-content>
+  @if (loading()) {
+    <mat-spinner diameter="32" />
+  } @else {
+    <div class="list">
+      @for (a of allocations(); track a.id) {
+        <div class="row">
+          <div>
+            <strong>{{ a.tenant_name }}</strong>
+            <div class="muted">{{ a.tenant_email }}</div>
+          </div>
+          <button mat-icon-button type="button" matTooltip="Release" color="warn" (click)="release(a)">
+            <mat-icon>person_remove</mat-icon>
+          </button>
+        </div>
+      } @empty {
+        <div class="muted">No active tenants in this room.</div>
+      }
+    </div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" mat-dialog-close>Close</button>
+</mat-dialog-actions>

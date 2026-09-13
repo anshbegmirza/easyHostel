@@ -1,0 +1,99 @@
+<section class="page-frame">
+  <div class="page-actionbar">
+    <div class="page-actionbar__title">
+      <h1>Complaint detail</h1>
+      <p>Status timeline and updates</p>
+    </div>
+    <div class="page-actionbar__actions">
+      <a mat-stroked-button routerLink="/complaints">
+        <mat-icon>arrow_back</mat-icon>
+        Back
+      </a>
+    </div>
+  </div>
+
+  <div class="page-body">
+  @if (loading()) {
+    <mat-spinner diameter="36" />
+  } @else {
+    @if (complaint(); as c) {
+      <div class="detail-card">
+        <div class="head">
+          <div>
+            <h2>{{ c.title }}</h2>
+            <p>{{ c.description || 'No details provided.' }}</p>
+          </div>
+          <div class="badges">
+            <app-status-icon [status]="c.status" />
+            <app-status-icon [status]="c.priority" />
+          </div>
+        </div>
+        @if (c.tenant_name) {
+          <div class="cell-muted">Tenant · {{ c.tenant_name }}</div>
+        }
+        @if (c.sla_due_at) {
+          <div class="cell-muted" [class.breach]="c.sla_breached">
+            SLA due · {{ c.sla_due_at | date: 'medium' }}
+            {{ c.sla_breached ? '(breached)' : '' }}
+          </div>
+        }
+        @if (photoUrl()) {
+          <img class="photo" [src]="photoUrl()!" alt="Complaint photo" />
+        }
+      </div>
+
+      @if (staff()) {
+        <form class="detail-card update" [formGroup]="statusForm" (ngSubmit)="saveStatus()">
+          <div class="page-actionbar__title">
+            <h2 class="sub">Update status</h2>
+          </div>
+          <div class="update-grid">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Status</mat-label>
+              <mat-select formControlName="status">
+                <mat-option value="open">open</mat-option>
+                <mat-option value="in_progress">in progress</mat-option>
+                <mat-option value="resolved">resolved</mat-option>
+                <mat-option value="closed">closed</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Note</mat-label>
+              <input matInput formControlName="note" />
+            </mat-form-field>
+            <button mat-flat-button color="primary" type="submit" [disabled]="busy()">Save</button>
+          </div>
+        </form>
+      }
+
+      <div class="table-card">
+        <div class="table-card__scroll">
+          <table mat-table [dataSource]="events()">
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let row">
+                <app-status-icon [status]="row.status" />
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="note">
+              <th mat-header-cell *matHeaderCellDef>Note</th>
+              <td mat-cell *matCellDef="let row">{{ row.note || pretty(row.status) }}</td>
+            </ng-container>
+            <ng-container matColumnDef="actor">
+              <th mat-header-cell *matHeaderCellDef>By</th>
+              <td mat-cell *matCellDef="let row" class="cell-muted">{{ row.actor_name || 'System' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="when">
+              <th mat-header-cell *matHeaderCellDef>When</th>
+              <td mat-cell *matCellDef="let row" class="cell-muted">{{ row.created_at | date: 'medium' }}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="eventColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: eventColumns"></tr>
+          </table>
+        </div>
+      </div>
+    }
+  }
+  </div>
+</section>

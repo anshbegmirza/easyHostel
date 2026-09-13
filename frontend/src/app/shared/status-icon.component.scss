@@ -1,0 +1,33 @@
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  color: var(--tone);
+}
+.status mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+.label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  letter-spacing: 0.2px;
+}
+.status[data-tone='ok'] {
+  --tone: var(--color-success);
+}
+.status[data-tone='warn'] {
+  --tone: var(--color-warning);
+}
+.status[data-tone='danger'] {
+  --tone: var(--color-danger);
+}
+.status[data-tone='info'] {
+  --tone: var(--color-primary);
+}
+.status[data-tone='muted'] {
+  --tone: var(--color-text-muted);
+}

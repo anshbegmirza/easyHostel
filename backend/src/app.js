@@ -4,7 +4,18 @@ require('dotenv').config();
 
 const { configRouter } = require('./modules/config/config.routes');
 const { authRouter } = require('./modules/auth/auth.routes');
+const { roomsRouter } = require('./modules/rooms/rooms.routes');
+const { feesRouter } = require('./modules/fees/fees.routes');
+const { complaintsRouter } = require('./modules/complaints/complaints.routes');
+const { dashboardRouter } = require('./modules/dashboard/dashboard.routes');
+const { noticesRouter } = require('./modules/notices/notices.routes');
+const { usersRouter } = require('./modules/users/users.routes');
+const { roomChangesRouter } = require('./modules/room-changes/room-changes.routes');
+const { notificationsRouter } = require('./modules/notifications/notifications.routes');
+const { reportsRouter } = require('./modules/reports/reports.routes');
+const { rolesRouter } = require('./modules/roles/roles.routes');
 const { requireAuth } = require('./middleware/requireAuth');
+const { encodeId } = require('./utils/publicId');
 
 const app = express();
 
@@ -34,15 +45,23 @@ app.get('/api/v1/health', (_req, res) => {
 
 app.use('/api/v1/config', configRouter);
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/rooms', roomsRouter);
+app.use('/api/v1/fees', feesRouter);
+app.use('/api/v1/complaints', complaintsRouter);
+app.use('/api/v1/dashboard', dashboardRouter);
+app.use('/api/v1/notices', noticesRouter);
+app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/room-changes', roomChangesRouter);
+app.use('/api/v1/notifications', notificationsRouter);
+app.use('/api/v1/reports', reportsRouter);
+app.use('/api/v1/roles', rolesRouter);
 
-// Protected sample: any authenticated caller
 app.get('/api/v1/secure/ping', requireAuth, (req, res) => {
-  const { encodeId } = require('./utils/publicId');
   res.json({
     ok: true,
-    userId: encodeId(req.user.id),
+    user_id: encodeId(req.user.id),
     role: req.user.role,
-    hostelId: encodeId(req.user.hostelId),
+    hostel_id: encodeId(req.user.hostel_id),
   });
 });
 

@@ -37,7 +37,13 @@ export class ThemeService {
     if (meta) {
       meta.setAttribute(
         'content',
-        brand === 'prod' ? (mode === 'dark' ? '#0a0f0c' : '#2e7d32') : mode === 'dark' ? '#0d0a10' : '#7b1fa2'
+        brand === 'prod'
+          ? mode === 'dark'
+            ? '#212121'
+            : '#2e7d32'
+          : mode === 'dark'
+            ? '#212121'
+            : '#7b1fa2'
       );
     }
   }

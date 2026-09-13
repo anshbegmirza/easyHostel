@@ -1,0 +1,99 @@
+<section class="edit-page">
+  <header class="edit-page__bar">
+    <nav class="edit-page__crumb">
+      <a [routerLink]="backLink()">
+        <mat-icon>arrow_back</mat-icon>
+        <span>{{ backLabel() }}</span>
+      </a>
+      <span class="sep">/</span>
+      <span class="current">{{ crumbLabel() }}</span>
+    </nav>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      class="edit-page__save"
+      [disabled]="!canSave()"
+      (click)="save()"
+    >
+      <mat-icon>save</mat-icon>
+      {{ mode() === 'template-create' ? 'Create' : 'Save' }}
+    </button>
+  </header>
+
+  <div class="edit-page__body">
+    @if (loading()) {
+      <mat-spinner diameter="36" />
+    } @else if (notFound()) {
+      <div class="edit-card empty">{{ notFound() }}</div>
+    } @else {
+      <section class="edit-card">
+        <h2 class="edit-card__title">{{ detailsTitle() }}</h2>
+        <p class="edit-card__lede">{{ pageSubtitle() }}</p>
+
+        <div class="toolbar">
+          @if (mode() !== 'user') {
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="field">
+              <mat-label>Name</mat-label>
+              <input matInput [(ngModel)]="templateName" placeholder="e.g. Night staff" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="field">
+              <mat-label>Default for role (optional)</mat-label>
+              <mat-select [(ngModel)]="roleKey">
+                <mat-option [value]="null">None</mat-option>
+                @for (r of roleOptions; track r.value) {
+                  <mat-option [value]="r.value">{{ r.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+          @if (mode() === 'user') {
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" class="field">
+              <mat-label>Apply template</mat-label>
+              <mat-select [(ngModel)]="applyTemplateId">
+                @for (t of templates; track t.id) {
+                  <mat-option [value]="t.id">{{ t.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="applyTemplate()"
+              [disabled]="applying() || !applyTemplateId"
+            >
+              Apply
+            </button>
+          }
+          <span class="spacer"></span>
+          <button mat-button type="button" class="linkish" (click)="setAll(true)">All</button>
+          <button mat-button type="button" class="linkish" (click)="setAll(false)">None</button>
+        </div>
+      </section>
+
+      <section class="edit-card">
+        <h2 class="edit-card__title">Modules</h2>
+        <div class="module-table">
+          <div class="module-table__head">
+            <span>Module</span>
+            <span>Access</span>
+          </div>
+          @for (m of modules(); track m.code) {
+            <label class="module-table__row">
+              <span>
+                <strong>{{ m.name }}</strong>
+                <span class="code">{{ m.code }}</span>
+              </span>
+              <mat-checkbox
+                color="primary"
+                [ngModel]="m.granted"
+                (ngModelChange)="toggle(m, $event)"
+                [disabled]="isLocked(m.code)"
+              />
+            </label>
+          }
+        </div>
+      </section>
+    }
+  </div>
+</section>

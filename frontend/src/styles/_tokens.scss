@@ -1,13 +1,29 @@
 :root {
-  --font-sans: Roboto, 'Helvetica Neue', sans-serif;
-  --radius: 24px;
+  --font-sans: 'IBM Plex Sans', Roboto, 'Helvetica Neue', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Shell geometry */
+  --topbar-height: 53px;
+  --actionbar-height: 52px;
+  --sidebar-wide: 251px;
+  --sidebar-condensed: 73px;
+  --content-padding: 24px;
+  --grid-gap: 16px;
+  --card-radius: 12px;
+  --button-radius: 8px;
+  --table-row-height: 48px;
+  --table-header-height: 48px;
+
+  --touch-min: 40px;
+  --login-card-max-width: 400px;
+  --login-vertical-spacing: clamp(16px, 5vh, 100px);
+
+  /* aliases used by layout */
+  --radius: var(--card-radius);
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
   --space-5: 1.5rem;
   --space-6: 2rem;
-  --touch-min: 44px;
-  --login-card-max-width: 400px;
-  --login-vertical-spacing: clamp(16px, 5vh, 100px);
 }

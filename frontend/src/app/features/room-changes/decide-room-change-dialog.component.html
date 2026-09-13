@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>{{ data.approve ? 'Approve change' : 'Reject change' }}</h2>
+<mat-dialog-content>
+  <form class="dlg-form" [formGroup]="form">
+    @if (data.approve) {
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Target room</mat-label>
+        <mat-select formControlName="toRoomId">
+          @for (r of data.rooms; track r.id) {
+            <mat-option [value]="r.id">{{ r.code }} ({{ r.occupied || 0 }}/{{ r.capacity }})</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Staff note</mat-label>
+      <input matInput formControlName="staffNote" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" mat-dialog-close>Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    [disabled]="form.invalid"
+    [mat-dialog-close]="form.getRawValue()"
+  >
+    Confirm
+  </button>
+</mat-dialog-actions>

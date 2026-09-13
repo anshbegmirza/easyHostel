@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Post notice</h2>
+<mat-dialog-content>
+  <form class="dlg-form" [formGroup]="form">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Body</mat-label>
+      <textarea matInput rows="4" formControlName="body"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" mat-dialog-close>Cancel</button>
+  <button mat-flat-button color="primary" type="button" [disabled]="form.invalid" [mat-dialog-close]="form.getRawValue()">
+    Post
+  </button>
+</mat-dialog-actions>

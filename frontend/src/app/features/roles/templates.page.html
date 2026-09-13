@@ -1,0 +1,29 @@
+<section class="page-frame">
+  <div class="page-actionbar">
+    <div class="page-actionbar__title">
+      <h1>Template management</h1>
+      <p>Module packs you can apply from User roles</p>
+    </div>
+    <div class="page-actionbar__actions">
+      <button mat-flat-button color="primary" type="button" (click)="openAdd()">
+        <mat-icon>add</mat-icon>
+        Add template
+      </button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <app-h4-table
+      [rows]="templates()"
+      [columns]="columns"
+      [actions]="actions"
+      [loading]="loading()"
+      emptyIcon="view_quilt"
+      emptyText="No templates yet"
+      searchPlaceholder="Search templates"
+      [searchFields]="['name', 'code', 'role_key']"
+      (actionClick)="onAction($event)"
+      (rowClick)="openEdit($event)"
+    />
+  </div>
+</section>

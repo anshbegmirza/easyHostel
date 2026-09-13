@@ -20,9 +20,9 @@ router.get('/', (_req, res) => {
       process.env.LOGIN_QUOTE ||
       'Clarity on fees, rooms, and complaints — so nobody has to chase updates.',
     coverQuoteAuthor: process.env.LOGIN_QUOTE_AUTHOR || 'easyHostel4',
-    allowPasswordSignup: false,
+    allowPasswordSignup: true,
     signupHint:
-      'Accounts are created by a superuser, or you can sign up with Google as a tenant.',
+      'Register with email/password (pending admin approval), or continue with Google as a tenant.',
   });
 });
 

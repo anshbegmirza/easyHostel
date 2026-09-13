@@ -1,0 +1,24 @@
+<section class="page-frame">
+  <div class="page-actionbar">
+    <div class="page-actionbar__title">
+      <h1>User roles</h1>
+      <p>Module access for every account — edit manually or apply a template</p>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <app-h4-table
+      [rows]="users()"
+      [columns]="columns"
+      [filters]="filters"
+      [actions]="actions"
+      [loading]="loading()"
+      emptyIcon="admin_panel_settings"
+      emptyText="No users yet"
+      searchPlaceholder="Search name, email, or role"
+      [searchFields]="['name', 'email', 'username', 'role', 'status']"
+      (actionClick)="onAction($event)"
+      (rowClick)="openEdit($event)"
+    />
+  </div>
+</section>

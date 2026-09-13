@@ -1,0 +1,40 @@
+<section class="page-frame">
+  <div class="page-actionbar">
+    <div class="page-actionbar__title">
+      <h1>Complaints</h1>
+      <p>
+        {{
+          staff()
+            ? 'Track and resolve tickets'
+            : parent()
+              ? 'Linked tenant complaints (read-only)'
+              : 'Raise and track issues'
+        }}
+      </p>
+    </div>
+    <div class="page-actionbar__actions">
+      @if (tenant()) {
+        <button mat-flat-button color="primary" type="button" (click)="openCreate()">
+          <mat-icon>add</mat-icon>
+          New complaint
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="page-body">
+    <app-h4-table
+      [rows]="complaints()"
+      [columns]="columns()"
+      [filters]="filters"
+      [actions]="actions"
+      [loading]="loading()"
+      emptyIcon="report_problem"
+      emptyText="No complaints yet"
+      searchPlaceholder="Search title or tenant"
+      [searchFields]="['title', 'tenant_name', 'status', 'priority']"
+      (actionClick)="onAction($event)"
+      (rowClick)="openRow($event)"
+    />
+  </div>
+</section>

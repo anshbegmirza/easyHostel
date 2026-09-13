@@ -1,0 +1,29 @@
+<section class="page-frame">
+  <div class="page-actionbar">
+    <div class="page-actionbar__title">
+      <h1>Rooms</h1>
+      <p>Occupancy and allocations</p>
+    </div>
+    <div class="page-actionbar__actions">
+      <button mat-flat-button color="primary" type="button" (click)="openCreate()">
+        <mat-icon>add</mat-icon>
+        Add room
+      </button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <app-h4-table
+      [rows]="rooms()"
+      [columns]="columns"
+      [filters]="filters"
+      [actions]="actions"
+      [loading]="loading()"
+      emptyIcon="meeting_room"
+      emptyText="No rooms yet"
+      searchPlaceholder="Search room code"
+      [searchFields]="['code', 'status']"
+      (actionClick)="onAction($event)"
+    />
+  </div>
+</section>

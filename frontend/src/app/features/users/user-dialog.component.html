@@ -1,0 +1,97 @@
+<h2 mat-dialog-title>{{ mode() === 'edit' ? 'Edit user' : 'User details' }}</h2>
+<mat-dialog-content>
+  @if (loading()) {
+    <div class="loading"><mat-spinner diameter="32" /></div>
+  } @else if (mode() === 'view') {
+    <div class="view-grid">
+      <div class="view-head">
+        <div>
+          <div class="view-name">{{ data.user.name }}</div>
+          <div class="cell-muted">{{ data.user.email }}</div>
+        </div>
+        <app-status-icon [status]="data.user.status" />
+      </div>
+      <div class="view-row"><span>Username</span><strong>{{ data.user.username || '—' }}</strong></div>
+      <div class="view-row"><span>Role</span><strong>{{ pretty(data.user.role) }}</strong></div>
+      <div class="view-row"><span>Phone</span><strong>{{ data.user.phone || '—' }}</strong></div>
+      <div class="view-row"><span>Sign-in</span><strong>{{ pretty(data.user.auth_provider) }}</strong></div>
+      <div class="view-row"><span>Status</span><strong>{{ pretty(data.user.status) }}</strong></div>
+      @if (data.user.role === 'parent') {
+        <div class="view-row view-row--block">
+          <span>Linked tenants</span>
+          @if (!linkedNames().length) {
+            <strong>—</strong>
+          } @else {
+            <ul>
+              @for (name of linkedNames(); track name) {
+                <li>{{ name }}</li>
+              }
+            </ul>
+          }
+        </div>
+      }
+    </div>
+  } @else {
+    <form class="dlg-form" [formGroup]="form">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="pending">pending</mat-option>
+          <mat-option value="active">active</mat-option>
+          <mat-option value="rejected">rejected</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>New password (optional)</mat-label>
+        <input matInput type="password" formControlName="password" />
+      </mat-form-field>
+      @if (data.user.role === 'parent') {
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Linked tenants</mat-label>
+          <mat-select formControlName="tenantIds" multiple>
+            @for (t of tenants(); track t.id) {
+              <mat-option [value]="t.id">{{ t.name }} ({{ t.email }})</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+      <p class="cell-muted role-note">Role · {{ pretty(data.user.role) }} (not editable)</p>
+    </form>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  @if (mode() === 'view') {
+    <button mat-button type="button" mat-dialog-close>Close</button>
+    <button mat-flat-button color="primary" type="button" (click)="startEdit()">
+      <mat-icon>edit</mat-icon>
+      Edit
+    </button>
+  } @else {
+    <button mat-button type="button" (click)="cancelEdit()" [disabled]="saving()">Cancel</button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      [disabled]="form.invalid || saving()"
+      (click)="save()"
+    >
+      Save
+    </button>
+  }
+</mat-dialog-actions>

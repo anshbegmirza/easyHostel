@@ -5,7 +5,7 @@ import { CredentialsService } from '../authentication/credentials.service';
 import { HostelContextService } from '../hostel/hostel-context.service';
 
 /**
- * Works4-style: prefix relative URLs with serverUrl + apiVersion,
+ * Prefix relative URLs with serverUrl + apiVersion,
  * attach Bearer token and X-Hostel-Partner.
  */
 export const apiPrefixInterceptor: HttpInterceptorFn = (req, next) => {

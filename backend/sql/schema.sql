@@ -1,4 +1,4 @@
--- easyHostel4 — Phase 1 schema
+-- easyHostel4 schema
 -- Rule: every business table includes hostel_id for multi-hostel scale later.
 
 CREATE DATABASE IF NOT EXISTS hostel_mgmt CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -20,9 +20,11 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR(190) NOT NULL,
   name VARCHAR(150) NOT NULL,
   password_hash VARCHAR(255) NULL,
-  role ENUM('superuser', 'admin', 'staff', 'tenant') NOT NULL DEFAULT 'tenant',
+  role ENUM('superuser', 'admin', 'staff', 'tenant', 'parent') NOT NULL DEFAULT 'tenant',
+  status ENUM('pending', 'active', 'rejected') NOT NULL DEFAULT 'active',
   auth_provider ENUM('local', 'google') NOT NULL DEFAULT 'local',
   google_sub VARCHAR(255) NULL,
+  phone VARCHAR(40) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT fk_users_hostel FOREIGN KEY (hostel_id) REFERENCES hostels (id),
@@ -31,7 +33,18 @@ CREATE TABLE IF NOT EXISTS users (
   UNIQUE KEY uq_users_hostel_google_sub (hostel_id, google_sub)
 );
 
--- Stub modules catalog (admin grants later)
+CREATE TABLE IF NOT EXISTS parent_tenant_links (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  hostel_id INT UNSIGNED NOT NULL,
+  parent_user_id INT UNSIGNED NOT NULL,
+  tenant_user_id INT UNSIGNED NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_ptl_hostel FOREIGN KEY (hostel_id) REFERENCES hostels (id),
+  CONSTRAINT fk_ptl_parent FOREIGN KEY (parent_user_id) REFERENCES users (id),
+  CONSTRAINT fk_ptl_tenant FOREIGN KEY (tenant_user_id) REFERENCES users (id),
+  UNIQUE KEY uq_ptl_parent_tenant (parent_user_id, tenant_user_id)
+);
+
 CREATE TABLE IF NOT EXISTS app_modules (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   code VARCHAR(64) NOT NULL,
@@ -50,6 +63,25 @@ CREATE TABLE IF NOT EXISTS admin_module_grants (
   CONSTRAINT fk_amg_user FOREIGN KEY (user_id) REFERENCES users (id),
   CONSTRAINT fk_amg_module FOREIGN KEY (module_id) REFERENCES app_modules (id),
   UNIQUE KEY uq_amg_user_module (user_id, module_id)
+);
+
+CREATE TABLE IF NOT EXISTS module_templates (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  hostel_id INT UNSIGNED NOT NULL,
+  name VARCHAR(120) NOT NULL,
+  code VARCHAR(80) NOT NULL,
+  role_key ENUM('superuser', 'admin', 'staff', 'tenant', 'parent') NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_mt_hostel FOREIGN KEY (hostel_id) REFERENCES hostels (id),
+  UNIQUE KEY uq_mt_hostel_code (hostel_id, code)
+);
+
+CREATE TABLE IF NOT EXISTS module_template_items (
+  template_id INT UNSIGNED NOT NULL,
+  module_id INT UNSIGNED NOT NULL,
+  PRIMARY KEY (template_id, module_id),
+  CONSTRAINT fk_mti_template FOREIGN KEY (template_id) REFERENCES module_templates (id) ON DELETE CASCADE,
+  CONSTRAINT fk_mti_module FOREIGN KEY (module_id) REFERENCES app_modules (id)
 );
 
 CREATE TABLE IF NOT EXISTS rooms (
@@ -75,6 +107,24 @@ CREATE TABLE IF NOT EXISTS allocations (
   CONSTRAINT fk_alloc_hostel FOREIGN KEY (hostel_id) REFERENCES hostels (id),
   CONSTRAINT fk_alloc_room FOREIGN KEY (room_id) REFERENCES rooms (id),
   CONSTRAINT fk_alloc_user FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS room_change_requests (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  hostel_id INT UNSIGNED NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  from_room_id INT UNSIGNED NULL,
+  reason VARCHAR(500) NOT NULL,
+  status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
+  staff_note VARCHAR(500) NULL,
+  to_room_id INT UNSIGNED NULL,
+  decided_by INT UNSIGNED NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_rcr_hostel FOREIGN KEY (hostel_id) REFERENCES hostels (id),
+  CONSTRAINT fk_rcr_user FOREIGN KEY (user_id) REFERENCES users (id),
+  CONSTRAINT fk_rcr_from FOREIGN KEY (from_room_id) REFERENCES rooms (id),
+  CONSTRAINT fk_rcr_to FOREIGN KEY (to_room_id) REFERENCES rooms (id)
 );
 
 CREATE TABLE IF NOT EXISTS fees (
@@ -110,6 +160,8 @@ CREATE TABLE IF NOT EXISTS complaints (
   description TEXT NULL,
   priority ENUM('low', 'medium', 'high') NOT NULL DEFAULT 'medium',
   status ENUM('open', 'in_progress', 'resolved', 'closed') NOT NULL DEFAULT 'open',
+  sla_due_at DATETIME NULL,
+  photo_path VARCHAR(500) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT fk_complaints_hostel FOREIGN KEY (hostel_id) REFERENCES hostels (id),
@@ -126,4 +178,30 @@ CREATE TABLE IF NOT EXISTS complaint_events (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_ce_hostel FOREIGN KEY (hostel_id) REFERENCES hostels (id),
   CONSTRAINT fk_ce_complaint FOREIGN KEY (complaint_id) REFERENCES complaints (id)
+);
+
+CREATE TABLE IF NOT EXISTS notices (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  hostel_id INT UNSIGNED NOT NULL,
+  title VARCHAR(200) NOT NULL,
+  body TEXT NOT NULL,
+  created_by INT UNSIGNED NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_notices_hostel FOREIGN KEY (hostel_id) REFERENCES hostels (id),
+  CONSTRAINT fk_notices_user FOREIGN KEY (created_by) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  hostel_id INT UNSIGNED NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  title VARCHAR(200) NOT NULL,
+  body VARCHAR(500) NOT NULL,
+  type VARCHAR(40) NOT NULL DEFAULT 'info',
+  link VARCHAR(200) NULL,
+  read_at DATETIME NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_notif_hostel FOREIGN KEY (hostel_id) REFERENCES hostels (id),
+  CONSTRAINT fk_notif_user FOREIGN KEY (user_id) REFERENCES users (id),
+  KEY idx_notif_user_unread (user_id, read_at)
 );

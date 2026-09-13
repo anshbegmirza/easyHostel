@@ -1,0 +1,34 @@
+<section class="page-frame">
+  <div class="page-actionbar">
+    <div class="page-actionbar__title">
+      <h1>Users</h1>
+      <p>Approve registrations, create tenants and parents</p>
+    </div>
+    <div class="page-actionbar__actions">
+      <button mat-stroked-button type="button" (click)="openTenant()">
+        <mat-icon>person_add</mat-icon>
+        Tenant
+      </button>
+      <button mat-flat-button color="primary" type="button" (click)="openParent()">
+        <mat-icon>family_restroom</mat-icon>
+        Parent
+      </button>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <app-h4-table
+      [rows]="users()"
+      [columns]="columns"
+      [filters]="filters"
+      [actions]="actions"
+      [loading]="loading()"
+      emptyIcon="group"
+      emptyText="No users yet"
+      searchPlaceholder="Search name or email"
+      [searchFields]="['name', 'email', 'username', 'role', 'status']"
+      (actionClick)="onAction($event)"
+      (rowClick)="openUser($event, 'view')"
+    />
+  </div>
+</section>

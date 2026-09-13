@@ -1,0 +1,24 @@
+.report-grid {
+  display: grid;
+  gap: 12px;
+}
+.report-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 16px 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+.title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

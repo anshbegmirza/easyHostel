@@ -11,8 +11,8 @@ function requireAuth(req, res, next) {
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET || 'change-me-in-production');
-    const userId = decodeId(payload.userId);
-    const hostelId = decodeId(payload.hostelId);
+    const userId = decodeId(payload.user_id ?? payload.userId);
+    const hostelId = decodeId(payload.hostel_id ?? payload.hostelId);
 
     if (userId == null || hostelId == null) {
       return res.status(401).json({ message: 'Invalid or expired token.', code: 'UNAUTHORIZED' });
@@ -21,7 +21,7 @@ function requireAuth(req, res, next) {
     req.user = {
       id: userId,
       role: payload.role,
-      hostelId,
+      hostel_id: hostelId,
     };
     return next();
   } catch {

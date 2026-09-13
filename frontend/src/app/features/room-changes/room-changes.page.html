@@ -1,0 +1,23 @@
+<section class="page-frame">
+  <div class="page-actionbar">
+    <div class="page-actionbar__title">
+      <h1>Room changes</h1>
+      <p>{{ staff() ? 'Review tenant requests' : 'Your room-change requests' }}</p>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <app-h4-table
+      [rows]="requests()"
+      [columns]="columns()"
+      [filters]="filters"
+      [actions]="actions()"
+      [loading]="loading()"
+      emptyIcon="swap_horiz"
+      emptyText="No room-change requests"
+      searchPlaceholder="Search tenant or reason"
+      [searchFields]="['tenant_name', 'reason', 'from_room_code', 'status']"
+      (actionClick)="onAction($event)"
+    />
+  </div>
+</section>

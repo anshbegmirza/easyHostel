@@ -5,17 +5,21 @@ const { OAuth2Client } = require('google-auth-library');
 const { pool } = require('../../config/db');
 const { resolveHostel } = require('../../middleware/resolveHostel');
 const { requireAuth } = require('../../middleware/requireAuth');
+const { rateLimitLogin } = require('../../middleware/rateLimitLogin');
 const { encodeId } = require('../../utils/publicId');
 const { publicUser, publicHostel } = require('../../utils/publicModels');
+const { notifyRoles } = require('../../utils/notify');
+const { moduleCodesForUser } = require('../roles/roles.routes');
 
 const router = express.Router();
+const loginLimiter = rateLimitLogin();
 
 function signToken(userRow) {
   return jwt.sign(
     {
-      userId: encodeId(userRow.id),
+      user_id: encodeId(userRow.id),
       role: userRow.role,
-      hostelId: encodeId(userRow.hostel_id),
+      hostel_id: encodeId(userRow.hostel_id),
     },
     process.env.JWT_SECRET || 'change-me-in-production',
     { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
@@ -50,7 +54,37 @@ async function findByGoogleSub(hostelId, googleSub) {
   return rows[0] || null;
 }
 
-router.post('/login', resolveHostel, async (req, res, next) => {
+async function linkedTenants(hostelId, parentUserId) {
+  const [rows] = await pool.query(
+    `SELECT u.*
+     FROM parent_tenant_links l
+     JOIN users u ON u.id = l.tenant_user_id
+     WHERE l.hostel_id = ? AND l.parent_user_id = ?
+     ORDER BY u.name`,
+    [hostelId, parentUserId]
+  );
+  return rows.map(publicUser);
+}
+
+function assertActive(user, res) {
+  if (user.status === 'pending') {
+    res.status(403).json({
+      message: 'Your account is pending admin approval.',
+      code: 'PENDING_APPROVAL',
+    });
+    return false;
+  }
+  if (user.status === 'rejected') {
+    res.status(403).json({
+      message: 'Your registration was rejected. Contact hostel admin.',
+      code: 'REJECTED',
+    });
+    return false;
+  }
+  return true;
+}
+
+router.post('/login', loginLimiter, resolveHostel, async (req, res, next) => {
   try {
     const username = String(req.body?.username || req.body?.email || '')
       .trim()
@@ -71,10 +105,16 @@ router.post('/login', resolveHostel, async (req, res, next) => {
       return res.status(401).json({ message: 'Incorrect username or password.' });
     }
 
+    if (!assertActive(user, res)) {
+      return undefined;
+    }
+
     return res.json({
       token: signToken(user),
       user: publicUser(user),
       hostel: publicHostel(req.hostel),
+      modules: await moduleCodesForUser(req.hostel.id, user),
+      linked_tenants: user.role === 'parent' ? await linkedTenants(req.hostel.id, user.id) : [],
     });
   } catch (err) {
     return next(err);
@@ -90,10 +130,11 @@ router.post('/google', resolveHostel, async (req, res, next) => {
     let name = '';
     let googleSub = null;
 
-    if (req.body?.idToken && clientId) {
+    const idToken = req.body?.id_token ?? req.body?.idToken;
+    if (idToken && clientId) {
       const client = new OAuth2Client(clientId);
       const ticket = await client.verifyIdToken({
-        idToken: String(req.body.idToken),
+        idToken: String(idToken),
         audience: clientId,
       });
       const payload = ticket.getPayload();
@@ -121,41 +162,91 @@ router.post('/google', resolveHostel, async (req, res, next) => {
       const usernameBase = email.split('@')[0].slice(0, 60);
       const [result] = await pool.query(
         `INSERT INTO users
-          (hostel_id, username, email, name, password_hash, role, auth_provider, google_sub)
-         VALUES (?, ?, ?, ?, NULL, 'tenant', 'google', ?)`,
+          (hostel_id, username, email, name, password_hash, role, status, auth_provider, google_sub)
+         VALUES (?, ?, ?, ?, NULL, 'tenant', 'pending', 'google', ?)`,
         [req.hostel.id, usernameBase, email, name, googleSub]
       );
       const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [result.insertId]);
       user = rows[0];
+      await notifyRoles(req.hostel.id, ['superuser', 'admin', 'staff'], {
+        title: 'New registration pending',
+        body: `${name} signed up with Google and awaits approval.`,
+        type: 'users',
+        link: '/users',
+      });
     } else if (googleSub && !user.google_sub) {
-      await pool.query('UPDATE users SET google_sub = ?, auth_provider = ? WHERE id = ?', [
-        googleSub,
-        user.auth_provider === 'local' ? user.auth_provider : 'google',
-        user.id,
-      ]);
+      await pool.query('UPDATE users SET google_sub = ? WHERE id = ?', [googleSub, user.id]);
       user.google_sub = googleSub;
+    }
+
+    if (!assertActive(user, res)) {
+      return undefined;
     }
 
     return res.json({
       token: signToken(user),
       user: publicUser(user),
       hostel: publicHostel(req.hostel),
+      modules: await moduleCodesForUser(req.hostel.id, user),
+      linked_tenants: [],
     });
   } catch (err) {
     return next(err);
   }
 });
 
-router.post('/register', (_req, res) => {
-  res.status(403).json({
-    message:
-      'Self-registration with password is disabled. Ask a superuser to create your account, or continue with Google.',
-  });
+router.post('/register', resolveHostel, async (req, res, next) => {
+  try {
+    const name = String(req.body?.name || '').trim();
+    const email = String(req.body?.email || '').trim().toLowerCase();
+    const username = String(req.body?.username || email.split('@')[0] || '')
+      .trim()
+      .toLowerCase()
+      .slice(0, 80);
+    const password = String(req.body?.password || '');
+
+    if (!name || !email || !email.includes('@') || password.length < 6) {
+      return res.status(400).json({
+        message: 'Name, valid email, and password (min 6 chars) are required.',
+        code: 'VALIDATION',
+      });
+    }
+
+    const existing = await findByEmail(req.hostel.id, email);
+    if (existing) {
+      return res.status(409).json({ message: 'Email already registered.', code: 'DUPLICATE' });
+    }
+
+    const hash = await bcrypt.hash(password, 10);
+    const [result] = await pool.query(
+      `INSERT INTO users
+        (hostel_id, username, email, name, password_hash, role, status, auth_provider)
+       VALUES (?, ?, ?, ?, ?, 'tenant', 'pending', 'local')`,
+      [req.hostel.id, username || null, email, name, hash]
+    );
+
+    await notifyRoles(req.hostel.id, ['superuser', 'admin', 'staff'], {
+      title: 'New registration pending',
+      body: `${name} registered and awaits approval.`,
+      type: 'users',
+      link: '/users',
+    });
+
+    return res.status(201).json({
+      message: 'Registration submitted. An admin will approve your account.',
+      user_id: encodeId(result.insertId),
+    });
+  } catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ message: 'Username or email already exists.', code: 'DUPLICATE' });
+    }
+    return next(err);
+  }
 });
 
 router.get('/me', requireAuth, resolveHostel, async (req, res, next) => {
   try {
-    if (req.user.hostelId !== req.hostel.id) {
+    if (req.user.hostel_id !== req.hostel.id) {
       return res.status(403).json({
         message: 'Token hostel does not match X-Hostel-Partner.',
         code: 'HOSTEL_MISMATCH',
@@ -169,9 +260,12 @@ router.get('/me', requireAuth, resolveHostel, async (req, res, next) => {
     if (!rows.length) {
       return res.status(404).json({ message: 'User not found.' });
     }
+    const user = rows[0];
     return res.json({
-      user: publicUser(rows[0]),
+      user: publicUser(user),
       hostel: publicHostel(req.hostel),
+      modules: await moduleCodesForUser(req.hostel.id, user),
+      linked_tenants: user.role === 'parent' ? await linkedTenants(req.hostel.id, user.id) : [],
     });
   } catch (err) {
     return next(err);

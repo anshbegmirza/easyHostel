@@ -1,5 +1,6 @@
 @use './styles/tokens';
 @use './styles/material-themes';
+@use './styles/layout';
 
 *,
 *::before,
@@ -17,10 +18,61 @@ body {
 }
 
 body {
-  line-height: 1.5;
+  line-height: 1.45;
   -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
 }
 
 a {
   color: var(--color-primary);
+}
+
+button.mat-mdc-button-base,
+a.mat-mdc-button-base {
+  border-radius: var(--button-radius) !important;
+  font-family: var(--font-sans) !important;
+  font-weight: 500 !important;
+}
+
+
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-raised-button.mat-primary {
+  --mdc-filled-button-container-color: var(--color-cta);
+  --mdc-filled-button-label-text-color: var(--color-on-cta);
+  --mdc-protected-button-container-color: var(--color-cta);
+  --mdc-protected-button-label-text-color: var(--color-on-cta);
+  background-color: var(--color-cta) !important;
+  color: var(--color-on-cta) !important;
+}
+
+.mat-mdc-unelevated-button.mat-primary .mat-icon,
+.mat-mdc-raised-button.mat-primary .mat-icon {
+  color: var(--color-on-cta) !important;
+}
+
+.mat-mdc-checkbox.mat-primary {
+  --mdc-checkbox-selected-icon-color: var(--color-cta);
+  --mdc-checkbox-selected-checkmark-color: var(--color-on-cta);
+  --mdc-checkbox-selected-focus-icon-color: var(--color-cta);
+  --mdc-checkbox-selected-hover-icon-color: var(--color-cta-hover);
+  --mdc-checkbox-selected-pressed-icon-color: var(--color-cta);
+}
+
+.mat-mdc-form-field {
+  font-family: var(--font-sans);
+}
+
+/* Dialogs — header/footer rhythm */
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: var(--card-radius) !important;
+}
+
+.mat-mdc-dialog-title {
+  font-family: var(--font-sans) !important;
+  font-weight: 500 !important;
+}
+
+.mat-mdc-dialog-actions {
+  min-height: 53px;
+  padding: 8px 16px 12px !important;
 }

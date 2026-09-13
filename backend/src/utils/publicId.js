@@ -1,7 +1,7 @@
 const Hashids = require('hashids/cjs');
 
 /**
- * Works4-style public IDs (e.g. D7dz24ZdbJ): encode/decode DB integers.
+ * Public IDs (e.g. D7dz24ZdbJ): encode/decode DB integers.
  * Obfuscates sequential ids in APIs/URLs. Still use parameterized SQL for injection safety.
  */
 const hashids = new Hashids(

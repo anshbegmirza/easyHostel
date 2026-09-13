@@ -9,7 +9,7 @@ import { CredentialsService } from '../authentication/credentials.service';
 export const SKIP_ERROR_SNACKBAR = new HttpContextToken<boolean>(() => false);
 
 /**
- * Works4-inspired error interceptor (simplified): snackbar + 401 → logout.
+ * Error interceptor: snackbar + 401 → logout.
  */
 export const errorHandlerInterceptor: HttpInterceptorFn = (req, next) => {
   const snackBar = inject(MatSnackBar);

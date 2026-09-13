@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Allocate · {{ data.room.code }}</h2>
+<mat-dialog-content>
+  <form class="dlg-form" [formGroup]="form">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full">
+      <mat-label>Tenant</mat-label>
+      <mat-select formControlName="userId">
+        @for (t of data.tenants; track t.id) {
+          <mat-option [value]="t.id">{{ t.name }} · {{ t.email }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" mat-dialog-close>Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    [disabled]="form.invalid"
+    [mat-dialog-close]="form.getRawValue()"
+  >
+    Allocate
+  </button>
+</mat-dialog-actions>

@@ -7,6 +7,8 @@ const path = require('path');
 const mysql = require('mysql2/promise');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
+const { migrateProductV2 } = require('./migrate-v2');
+
 async function migrateSlugToPartner(conn) {
   await conn.query('USE hostel_mgmt');
   const [cols] = await conn.query(
@@ -55,6 +57,7 @@ async function run() {
     await conn.query(schemaSql);
 
     await migrateSlugToPartner(conn);
+    await migrateProductV2(conn);
 
     const seedSql = fs.readFileSync(seedPath, 'utf8');
     console.log('Applying seed.sql...');

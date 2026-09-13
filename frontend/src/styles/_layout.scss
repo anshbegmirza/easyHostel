@@ -1,0 +1,229 @@
+/* Page frame + table chrome */
+
+.page-frame {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - var(--topbar-height));
+}
+
+.page-actionbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--grid-gap);
+  min-height: var(--actionbar-height);
+  padding: 0 var(--content-padding);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  flex-wrap: wrap;
+}
+
+.page-actionbar__title {
+  display: grid;
+  gap: 0;
+  min-width: 0;
+  padding: 8px 0;
+}
+
+.page-actionbar__title h1 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+.page-actionbar__title p {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  line-height: 1.3;
+}
+
+.page-actionbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 0;
+}
+
+.page-actionbar__actions .mat-mdc-button-base {
+  min-height: 36px;
+}
+
+.page-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gap);
+  padding: var(--content-padding);
+  min-height: 0;
+}
+
+.table-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.table-card__scroll {
+  overflow: auto;
+  flex: 1;
+  min-height: 112px;
+}
+
+.table-card table.mat-mdc-table {
+  width: 100%;
+  min-width: 720px;
+  background: transparent !important;
+}
+
+.table-card .mat-mdc-header-row {
+  height: var(--table-header-height);
+  background: transparent;
+}
+
+.table-card .mat-mdc-row {
+  height: var(--table-row-height);
+  cursor: default;
+}
+
+.table-card .mat-mdc-row:hover {
+  background: var(--color-hover) !important;
+}
+
+.table-card .mat-mdc-header-cell {
+  padding: 8px 16px !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--color-text-muted) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+.table-card .mat-mdc-cell {
+  padding: 8px 16px !important;
+  font-size: 0.875rem !important;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+.table-card .mat-mdc-row:last-child .mat-mdc-cell {
+  border-bottom: none !important;
+}
+
+.table-card .mat-mdc-header-cell:first-child,
+.table-card .mat-mdc-cell:first-child {
+  padding-inline-start: 20px !important;
+}
+
+.table-card .mat-mdc-header-cell:last-child,
+.table-card .mat-mdc-cell:last-child {
+  padding-inline-end: 12px !important;
+}
+
+.table-card .col-actions {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.table-card .cell-muted {
+  color: var(--color-text-muted);
+}
+
+.table-card .empty-state {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  min-height: 220px;
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.table-card .empty-state mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  opacity: 0.4;
+}
+
+.dash-grid {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.dash-tile {
+  display: grid;
+  gap: 6px;
+  padding: 20px;
+  border-radius: var(--card-radius);
+  text-decoration: none;
+  color: inherit;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  min-height: 118px;
+  transition: background 0.15s ease;
+}
+
+.dash-tile:hover {
+  background: var(--color-hover);
+}
+
+.dash-tile__label {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.dash-tile__value {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  line-height: 1.15;
+}
+
+.dash-tile__hint {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.detail-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--card-radius);
+  padding: 20px 24px;
+}
+
+@media (max-width: 899px) {
+  .page-body {
+    padding: 16px;
+  }
+
+  .page-actionbar {
+    padding: 0 16px;
+  }
+
+  .table-card table.mat-mdc-table {
+    min-width: 600px;
+  }
+}

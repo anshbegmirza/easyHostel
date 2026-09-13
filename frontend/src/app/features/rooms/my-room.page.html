@@ -1,0 +1,67 @@
+<section class="page-frame">
+  <div class="page-actionbar">
+    <div class="page-actionbar__title">
+      <h1>My room</h1>
+      <p>Your current allocation</p>
+    </div>
+    <div class="page-actionbar__actions">
+      @if (room()) {
+        <button mat-stroked-button type="button" (click)="requestChange()" [disabled]="hasPending()">
+          <mat-icon>swap_horiz</mat-icon>
+          {{ hasPending() ? 'Change pending' : 'Request change' }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="page-body">
+  @if (loading()) {
+    <mat-spinner diameter="36" />
+  } @else {
+    @if (room(); as r) {
+      <div class="detail-card">
+        <div class="row">
+          <div>
+            <div class="label">Room</div>
+            <div class="value">{{ r.code }}</div>
+          </div>
+          <app-status-icon [status]="r.status" />
+        </div>
+        <div class="meta">
+          <div><span class="label">Capacity</span> {{ r.capacity }}</div>
+          @if (startDate()) {
+            <div><span class="label">Since</span> {{ startDate() }}</div>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="table-card">
+        <div class="empty-state">
+          <mat-icon>bed</mat-icon>
+          <div>No room allocated yet. Ask staff at the front desk.</div>
+        </div>
+      </div>
+    }
+
+    @if (requests().length) {
+      <div class="detail-card">
+        <h2>Change requests</h2>
+        @for (req of requests(); track req.id) {
+          <div class="req">
+            <app-status-icon [status]="req.status" />
+            <div>
+              <div>{{ req.reason }}</div>
+              <div class="cell-muted">
+                {{ req.from_room_code || '—' }}
+                @if (req.to_room_code) {
+                  → {{ req.to_room_code }}
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+  </div>
+</section>

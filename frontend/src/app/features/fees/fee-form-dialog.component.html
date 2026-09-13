@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Create due</h2>
+<mat-dialog-content>
+  <form class="dlg-form" [formGroup]="form">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Tenant</mat-label>
+      <mat-select formControlName="userId">
+        @for (t of data.tenants; track t.id) {
+          <mat-option [value]="t.id">{{ t.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Period</mat-label>
+      <input matInput formControlName="periodLabel" placeholder="Sep 2026" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-label>Amount</mat-label>
+      <input matInput type="number" min="1" formControlName="amount" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" mat-dialog-close>Cancel</button>
+  <button mat-flat-button color="primary" type="button" [disabled]="form.invalid" [mat-dialog-close]="form.getRawValue()">
+    Create
+  </button>
+</mat-dialog-actions>

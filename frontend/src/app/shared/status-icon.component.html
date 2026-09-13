@@ -1,0 +1,6 @@
+<span class="status" [attr.data-tone]="resolvedTone" [matTooltip]="tooltipText">
+  <mat-icon>{{ resolvedIcon }}</mat-icon>
+  @if (showLabel) {
+    <span class="label">{{ displayLabel }}</span>
+  }
+</span>

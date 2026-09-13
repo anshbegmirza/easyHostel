@@ -1,0 +1,39 @@
+<section class="page-frame">
+  <div class="page-actionbar">
+    <div class="page-actionbar__title">
+      <h1>Fees</h1>
+      <p>
+        {{
+          staff()
+            ? 'Hostel fee ledger — mark paid / waived manually'
+            : parent()
+              ? 'Linked tenant fees (read-only)'
+              : 'Your dues and payments'
+        }}
+      </p>
+    </div>
+    <div class="page-actionbar__actions">
+      @if (staff()) {
+        <button mat-flat-button color="primary" type="button" (click)="openCreate()">
+          <mat-icon>add</mat-icon>
+          Create due
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="page-body">
+    <app-h4-table
+      [rows]="fees()"
+      [columns]="columns()"
+      [filters]="filters"
+      [actions]="actions()"
+      [loading]="loading()"
+      emptyIcon="payments"
+      emptyText="No fees yet"
+      searchPlaceholder="Search period or tenant"
+      [searchFields]="['period_label', 'tenant_name', 'status']"
+      (actionClick)="onAction($event)"
+    />
+  </div>
+</section>

@@ -1,0 +1,31 @@
+<section class="page-frame">
+  <div class="page-actionbar">
+    <div class="page-actionbar__title">
+      <h1>Reports</h1>
+      <p>Download occupancy, fees, and complaints</p>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="report-grid">
+      @for (row of kinds; track row.kind) {
+        <div class="report-row">
+          <div>
+            <div class="title">{{ row.label }}</div>
+            <div class="cell-muted">{{ row.hint }}</div>
+          </div>
+          <div class="btns">
+            <button mat-stroked-button type="button" (click)="download(row.kind, 'xlsx')">
+              <mat-icon>table_view</mat-icon>
+              Excel
+            </button>
+            <button mat-flat-button color="primary" type="button" (click)="download(row.kind, 'pdf')">
+              <mat-icon>picture_as_pdf</mat-icon>
+              PDF
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

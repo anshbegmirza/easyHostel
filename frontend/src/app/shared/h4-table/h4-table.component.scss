@@ -1,0 +1,39 @@
+.dt-table {
+  min-height: 320px;
+}
+.dt-table__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-text) 2%, var(--color-surface));
+}
+.search {
+  flex: 1 1 220px;
+  min-width: 180px;
+  max-width: 360px;
+}
+.filter {
+  flex: 0 1 160px;
+  min-width: 140px;
+}
+.dt-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+}
+.dt-row {
+  cursor: default;
+}
+.dt-row--clickable {
+  cursor: pointer;
+}
+.dt-row--clickable:hover {
+  background: var(--color-hover);
+}
+:host ::ng-deep .dt-table__toolbar .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}

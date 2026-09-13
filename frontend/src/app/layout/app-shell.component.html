@@ -1,0 +1,135 @@
+<mat-sidenav-container class="shell">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    [mode]="handset() ? 'over' : 'side'"
+    [opened]="!handset()"
+    [fixedInViewport]="true"
+  >
+    <div class="sidenav__brand">
+      <a class="brand-link" routerLink="/" (click)="closeIfHandset()">
+        <img
+          class="brand-logo"
+          src="/assets/logo-mark.png"
+          width="160"
+          height="40"
+          alt="easyHostel4"
+        />
+      </a>
+    </div>
+
+    <nav class="sidenav__nav" aria-label="Main">
+      @for (item of navItems(); track trackNav(item)) {
+        @if (isGroup(item)) {
+          <div class="nav-group">
+            <button
+              type="button"
+              class="nav-link nav-group__toggle"
+              [class.open]="settingsOpen()"
+              (click)="toggleSettings()"
+            >
+              <mat-icon>{{ item.icon }}</mat-icon>
+              <span>{{ item.label }}</span>
+              <mat-icon class="chevron">{{ settingsOpen() ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </button>
+            @if (settingsOpen()) {
+              <div class="nav-group__children">
+                @for (child of item.children; track child.path) {
+                  <a
+                    class="nav-link nav-link--child"
+                    [routerLink]="child.path"
+                    routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: child.exact }"
+                    (click)="closeIfHandset()"
+                  >
+                    <mat-icon>{{ child.icon }}</mat-icon>
+                    <span>{{ child.label }}</span>
+                  </a>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <a
+            class="nav-link"
+            [routerLink]="item.path"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: item.exact }"
+            (click)="closeIfHandset()"
+          >
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span>{{ item.label }}</span>
+          </a>
+        }
+      }
+    </nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main">
+    <header class="topbar">
+      @if (handset()) {
+        <button mat-icon-button type="button" (click)="drawer.toggle()" aria-label="Menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+      <div class="topbar__search-slot cell-muted">Operations</div>
+      <span class="spacer"></span>
+      <button
+        mat-icon-button
+        type="button"
+        [matMenuTriggerFor]="notifMenu"
+        [matTooltip]="'Notifications'"
+        (menuOpened)="loadNotifications()"
+      >
+        <mat-icon [matBadge]="unread() || null" matBadgeSize="small" matBadgeColor="warn">
+          notifications
+        </mat-icon>
+      </button>
+      <mat-menu #notifMenu="matMenu" class="notif-menu">
+        <div class="notif-head" (click)="$event.stopPropagation()">
+          <strong>Notifications</strong>
+          @if (unread()) {
+            <button mat-button type="button" (click)="markAllRead()">Mark all read</button>
+          }
+        </div>
+        @if (!notifications().length) {
+          <div class="notif-empty cell-muted">Nothing new</div>
+        }
+        @for (n of notifications(); track n.id) {
+          <button mat-menu-item type="button" class="notif-item" [class.unread]="!n.read" (click)="openNotif(n)">
+            <div class="notif-title">{{ n.title }}</div>
+            <div class="notif-body cell-muted">{{ n.body }}</div>
+            <div class="notif-when cell-muted">{{ n.created_at | date: 'short' }}</div>
+          </button>
+        }
+      </mat-menu>
+      <button
+        mat-icon-button
+        type="button"
+        (click)="theme.toggleColorMode()"
+        [matTooltip]="theme.colorMode() === 'light' ? 'Dark mode' : 'Light mode'"
+      >
+        <mat-icon>{{ theme.colorMode() === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
+      </button>
+      <button
+        type="button"
+        class="topbar__profile"
+        [matTooltip]="auth.user()?.email || 'Profile'"
+        (click)="goToProfile()"
+      >
+        <div class="avatar">{{ initials() }}</div>
+        <div class="who">
+          <div class="name">{{ auth.user()?.name }}</div>
+          <div class="role">{{ auth.user()?.role }}</div>
+        </div>
+      </button>
+      <button mat-icon-button type="button" matTooltip="Log out" (click)="auth.logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </header>
+
+    <div class="outlet">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

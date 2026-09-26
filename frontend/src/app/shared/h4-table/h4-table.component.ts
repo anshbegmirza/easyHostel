@@ -56,7 +56,6 @@ export class H4TableComponent<T extends object = Record<string, unknown>> {
   @Input() emptyIcon = 'inbox';
   @Input() emptyText = 'No data';
   @Input() searchPlaceholder = 'Search';
-  /** Fields included in free-text search (in addition to all text columns) */
   @Input() searchFields: string[] = [];
 
   @Output() actionClick = new EventEmitter<{ actionId: string; row: T }>();

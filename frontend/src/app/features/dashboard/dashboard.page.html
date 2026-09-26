@@ -8,7 +8,7 @@
 
   <div class="page-body">
   @if (loading()) {
-    <mat-spinner diameter="36" />
+    <div class="page-loader"><mat-spinner diameter="36" /></div>
   } @else {
     @if (summary(); as s) {
       <div class="dash-grid">

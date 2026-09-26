@@ -13,7 +13,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { finalize } from 'rxjs/operators';
 import { AppConfigService } from '../core/config/app-config.service';
 import { AuthService } from '../core/authentication/auth.service';
-import { ThemeService } from '../core/theme/theme.service';
+import { ThemeMenuComponent } from '../shared/theme-menu/theme-menu.component';
+import { PwaInstallBannerComponent } from '../shared/pwa-install-banner/pwa-install-banner.component';
 import { loadGoogleIdentityScript } from '../core/authentication/google-identity';
 import { TestGoogleDialogComponent } from './test-google-dialog.component';
 
@@ -31,6 +32,8 @@ import { TestGoogleDialogComponent } from './test-google-dialog.component';
     MatIconModule,
     MatProgressSpinnerModule,
     MatDialogModule,
+    ThemeMenuComponent,
+    PwaInstallBannerComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -43,7 +46,6 @@ export class LoginComponent implements OnInit {
   private router = inject(Router);
   private dialog = inject(MatDialog);
   appConfig = inject(AppConfigService);
-  theme = inject(ThemeService);
 
   loading = signal(false);
   error = signal('');

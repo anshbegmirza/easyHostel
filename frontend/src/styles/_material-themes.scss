@@ -12,6 +12,14 @@ $prod-primary: mat.m2-define-palette(mat.$m2-green-palette, 700, 500, 900);
 $prod-accent: mat.m2-define-palette(mat.$m2-blue-grey-palette, A200, A100, A400);
 $prod-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
+$works4-primary: mat.m2-define-palette(mat.$m2-blue-palette);
+$works4-accent: mat.m2-define-palette(mat.$m2-grey-palette);
+$works4-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+$amber-primary: mat.m2-define-palette(mat.$m2-amber-palette, 800, 600, 900);
+$amber-accent: mat.m2-define-palette(mat.$m2-deep-orange-palette, A200, A100, A400);
+$amber-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
 $typography: mat.m2-define-typography-config(
   $font-family: '"IBM Plex Sans", Roboto, sans-serif'
 );
@@ -64,6 +72,54 @@ $prod-dark: mat.m2-define-dark-theme(
   )
 );
 
+$works4-light: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $works4-primary,
+      accent: $works4-accent,
+      warn: $works4-warn,
+    ),
+    typography: $typography,
+    density: -1,
+  )
+);
+
+$works4-dark: mat.m2-define-dark-theme(
+  (
+    color: (
+      primary: $works4-primary,
+      accent: $works4-accent,
+      warn: $works4-warn,
+    ),
+    typography: $typography,
+    density: -1,
+  )
+);
+
+$amber-light: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: $amber-primary,
+      accent: $amber-accent,
+      warn: $amber-warn,
+    ),
+    typography: $typography,
+    density: -1,
+  )
+);
+
+$amber-dark: mat.m2-define-dark-theme(
+  (
+    color: (
+      primary: $amber-primary,
+      accent: $amber-accent,
+      warn: $amber-warn,
+    ),
+    typography: $typography,
+    density: -1,
+  )
+);
+
 @include mat.core();
 @include mat.all-component-typographies($test-light);
 
@@ -81,6 +137,22 @@ html.brand-prod {
 
 html.brand-prod[data-theme='dark'] {
   @include mat.all-component-colors($prod-dark);
+}
+
+html.brand-works4 {
+  @include mat.all-component-colors($works4-light);
+}
+
+html.brand-works4[data-theme='dark'] {
+  @include mat.all-component-colors($works4-dark);
+}
+
+html.brand-amber {
+  @include mat.all-component-colors($amber-light);
+}
+
+html.brand-amber[data-theme='dark'] {
+  @include mat.all-component-colors($amber-dark);
 }
 
 // Neutral chrome + brand primary for accents/CTAs
@@ -168,4 +240,90 @@ html.brand-prod[data-theme='dark'] {
   --color-warning: #ffb74d;
   --color-danger: #e57373;
   --login-cover: linear-gradient(145deg, #000000 0%, #212121 50%, #1b5e20 100%);
+}
+
+html.brand-works4,
+html.brand-works4[data-theme='light'] {
+  --color-primary: #1976d2;
+  --color-primary-hover: #1565c0;
+  --color-primary-muted: rgba(25, 118, 210, 0.08);
+  --color-cta: #1976d2;
+  --color-cta-hover: #1565c0;
+  --color-on-cta: #ffffff;
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
+  --color-chrome: #ffffff;
+  --color-hover: rgba(0, 0, 0, 0.04);
+  --color-border: #e0e0e0;
+  --color-text: #212121;
+  --color-text-muted: #757575;
+  --color-on-primary: #ffffff;
+  --color-success: #4caf50;
+  --color-warning: #ff9800;
+  --color-danger: #f44336;
+  --login-cover: linear-gradient(145deg, #0d47a1 0%, #1976d2 45%, #64b5f6 100%);
+}
+
+html.brand-works4[data-theme='dark'] {
+  --color-primary: #90caf9;
+  --color-primary-hover: #bbdefb;
+  --color-primary-muted: rgba(144, 202, 249, 0.12);
+  --color-cta: #1976d2;
+  --color-cta-hover: #1565c0;
+  --color-on-cta: #ffffff;
+  --color-bg: #303030;
+  --color-surface: #424242;
+  --color-chrome: #212121;
+  --color-hover: rgba(255, 255, 255, 0.04);
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-text: rgba(255, 255, 255, 0.87);
+  --color-text-muted: rgba(255, 255, 255, 0.7);
+  --color-on-primary: #0d1b2a;
+  --color-success: #81c784;
+  --color-warning: #ffb74d;
+  --color-danger: #e57373;
+  --login-cover: linear-gradient(145deg, #000000 0%, #212121 50%, #0d47a1 100%);
+}
+
+html.brand-amber,
+html.brand-amber[data-theme='light'] {
+  --color-primary: #ff8f00;
+  --color-primary-hover: #ef6c00;
+  --color-primary-muted: rgba(255, 143, 0, 0.1);
+  --color-cta: #ff8f00;
+  --color-cta-hover: #ef6c00;
+  --color-on-cta: #ffffff;
+  --color-bg: #faf8f5;
+  --color-surface: #ffffff;
+  --color-chrome: #ffffff;
+  --color-hover: rgba(0, 0, 0, 0.04);
+  --color-border: #e8e0d5;
+  --color-text: #3e2723;
+  --color-text-muted: #795548;
+  --color-on-primary: #ffffff;
+  --color-success: #689f38;
+  --color-warning: #ff9800;
+  --color-danger: #e53935;
+  --login-cover: linear-gradient(145deg, #e65100 0%, #ff8f00 45%, #ffcc80 100%);
+}
+
+html.brand-amber[data-theme='dark'] {
+  --color-primary: #ffb74d;
+  --color-primary-hover: #ffcc80;
+  --color-primary-muted: rgba(255, 183, 77, 0.12);
+  --color-cta: #ff8f00;
+  --color-cta-hover: #ef6c00;
+  --color-on-cta: #ffffff;
+  --color-bg: #2c2824;
+  --color-surface: #3d3832;
+  --color-chrome: #1f1c18;
+  --color-hover: rgba(255, 255, 255, 0.04);
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-text: rgba(255, 255, 255, 0.87);
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-on-primary: #1a1208;
+  --color-success: #aed581;
+  --color-warning: #ffb74d;
+  --color-danger: #ef5350;
+  --login-cover: linear-gradient(145deg, #000000 0%, #212121 50%, #e65100 100%);
 }

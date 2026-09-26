@@ -89,11 +89,10 @@
         </mat-card>
       </div>
 
+      <app-pwa-install-banner />
+
       <div class="inner-area__bottom">
-        <button mat-button type="button" (click)="theme.toggleColorMode()">
-          <mat-icon>{{ theme.colorMode() === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
-          {{ theme.colorMode() === 'light' ? 'Dark' : 'Light' }} theme
-        </button>
+        <app-theme-menu />
         <p class="version">Version {{ appConfig.config().version }}</p>
       </div>
     </div>

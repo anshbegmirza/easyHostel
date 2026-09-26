@@ -18,7 +18,8 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../core/authentication/auth.service';
-import { ThemeService } from '../core/theme/theme.service';
+import { ThemeMenuComponent } from '../shared/theme-menu/theme-menu.component';
+import { PwaInstallBannerComponent } from '../shared/pwa-install-banner/pwa-install-banner.component';
 import { AppNotification, NotificationsService } from './service/notifications.service';
 import { isParentRole, isStaffRole, isTenantRole } from '../core/roles';
 import { CredentialsService } from '../core/authentication/credentials.service';
@@ -44,6 +45,8 @@ function isNavGroup(item: NavItem): item is { label: string; icon: string; child
     MatBadgeModule,
     MatMenuModule,
     DatePipe,
+    ThemeMenuComponent,
+    PwaInstallBannerComponent,
   ],
   templateUrl: './app-shell.component.html',
   styleUrl: './app-shell.component.scss',
@@ -51,7 +54,6 @@ function isNavGroup(item: NavItem): item is { label: string; icon: string; child
 export class AppShellComponent implements OnInit {
   readonly auth = inject(AuthService);
   readonly credentials = inject(CredentialsService);
-  readonly theme = inject(ThemeService);
   readonly notificationsService = inject(NotificationsService);
   readonly router = inject(Router);
   readonly drawer = viewChild<MatSidenav>('drawer');

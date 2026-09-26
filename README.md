@@ -12,7 +12,7 @@ Digital platform for hostel / PG operations: rooms, fees, complaints, notices, a
 | Frontend | Angular 19+ (PWA), Angular Material |
 | Backend | Node.js + Express (`/api/v1`) |
 | Database | MySQL (`hostel_mgmt`) |
-| Theme | Test: purple · Live/prod: green (`APP_MODE`) |
+| Theme | Test: purple · Prod: green (`APP_MODE`). Optional override: `THEME_PALETTE` |
 
 ## Prerequisites
 

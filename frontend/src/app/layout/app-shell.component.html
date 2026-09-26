@@ -103,14 +103,7 @@
           </button>
         }
       </mat-menu>
-      <button
-        mat-icon-button
-        type="button"
-        (click)="theme.toggleColorMode()"
-        [matTooltip]="theme.colorMode() === 'light' ? 'Dark mode' : 'Light mode'"
-      >
-        <mat-icon>{{ theme.colorMode() === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
-      </button>
+      <app-theme-menu />
       <button
         type="button"
         class="topbar__profile"
@@ -127,6 +120,8 @@
         <mat-icon>logout</mat-icon>
       </button>
     </header>
+
+    <app-pwa-install-banner />
 
     <div class="outlet">
       <router-outlet />

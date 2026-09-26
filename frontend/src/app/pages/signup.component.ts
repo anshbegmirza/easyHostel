@@ -11,7 +11,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { finalize } from 'rxjs/operators';
 import { AppConfigService } from '../core/config/app-config.service';
 import { AuthService } from '../core/authentication/auth.service';
-import { ThemeService } from '../core/theme/theme.service';
+import { ThemeMenuComponent } from '../shared/theme-menu/theme-menu.component';
+import { PwaInstallBannerComponent } from '../shared/pwa-install-banner/pwa-install-banner.component';
 import { loadGoogleIdentityScript } from '../core/authentication/google-identity';
 import { TestGoogleDialogComponent } from './test-google-dialog.component';
 
@@ -27,6 +28,8 @@ import { TestGoogleDialogComponent } from './test-google-dialog.component';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    ThemeMenuComponent,
+    PwaInstallBannerComponent,
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
@@ -39,7 +42,6 @@ export class SignupComponent implements OnInit {
   private dialog = inject(MatDialog);
   private fb = inject(FormBuilder);
   appConfig = inject(AppConfigService);
-  theme = inject(ThemeService);
 
   loading = signal(false);
   error = signal('');

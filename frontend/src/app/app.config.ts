@@ -12,11 +12,9 @@ import { errorHandlerInterceptor } from './core/http/error-handler.interceptor';
 
 function initApp() {
   const config = inject(AppConfigService);
-  const theme = inject(ThemeService);
-  return () =>
-    config.load().then(() => {
-      theme.colorMode();
-    });
+  // ThemeService reads palette from config via effect once loaded
+  inject(ThemeService);
+  return () => config.load();
 }
 
 export const appConfig: ApplicationConfig = {

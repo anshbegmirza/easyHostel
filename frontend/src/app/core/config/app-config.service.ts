@@ -8,6 +8,7 @@ const fallbackConfig: AppConfig = {
   appName: 'easyHostel4',
   mode: 'test',
   brand: 'purple',
+  themePalette: 'purple',
   version: '0.1.0',
   googleClientId: '',
   googleEnabled: true,

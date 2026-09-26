@@ -52,6 +52,9 @@ async function run() {
   });
 
   try {
+    console.log('Resetting database hostel_mgmt...');
+    await conn.query('DROP DATABASE IF EXISTS hostel_mgmt');
+
     const schemaSql = fs.readFileSync(schemaPath, 'utf8');
     console.log('Applying schema.sql...');
     await conn.query(schemaSql);

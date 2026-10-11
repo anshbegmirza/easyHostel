@@ -8,6 +8,7 @@ const mysql = require('mysql2/promise');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const { migrateProductV2 } = require('./migrate-v2');
+const { mysqlSsl } = require('../config/db');
 
 async function migrateSlugToPartner(conn) {
   await conn.query('USE hostel_mgmt');
@@ -49,6 +50,7 @@ async function run() {
     user,
     password,
     multipleStatements: true,
+    ...mysqlSsl(),
   });
 
   try {

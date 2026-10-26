@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,10 +8,12 @@ import { RoomChangesService, RoomChangeRequest } from '../room-changes/service/r
 import { RoomsService, Room } from './service/rooms.service';
 import { StatusIconComponent } from '../../shared/status-icon.component';
 import { RoomChangeRequestDialogComponent } from './room-change-request-dialog.component';
+import { ToastService } from '../../core/toast.service';
 
 @Component({
   selector: 'app-my-room-page',
   imports: [
+    DatePipe,
     MatProgressSpinnerModule,
     MatIconModule,
     MatButtonModule,
@@ -23,6 +26,7 @@ export class MyRoomPageComponent implements OnInit {
   readonly api = inject(RoomsService);
   readonly roomChanges = inject(RoomChangesService);
   readonly dialog = inject(MatDialog);
+  readonly toast = inject(ToastService);
   readonly loading = signal(true);
   readonly room = signal<Room | null>(null);
   readonly startDate = signal<string | null>(null);
@@ -62,7 +66,12 @@ export class MyRoomPageComponent implements OnInit {
         if (!value) {
           return;
         }
-        this.roomChanges.create(value).subscribe({ next: () => this.reload() });
+        this.roomChanges.create(value).subscribe({
+          next: () => {
+            this.toast.success('Room change requested');
+            this.reload();
+          },
+        });
       });
   }
 }

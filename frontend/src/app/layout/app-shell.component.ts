@@ -20,6 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../core/authentication/auth.service';
 import { ThemeMenuComponent } from '../shared/theme-menu/theme-menu.component';
 import { PwaInstallBannerComponent } from '../shared/pwa-install-banner/pwa-install-banner.component';
+import { ConfirmDialogService } from '../shared/confirm-dialog/confirm-dialog.service';
 import { AppNotification, NotificationsService } from './service/notifications.service';
 import { isParentRole, isStaffRole, isTenantRole } from '../core/roles';
 import { CredentialsService } from '../core/authentication/credentials.service';
@@ -55,6 +56,7 @@ export class AppShellComponent implements OnInit {
   readonly auth = inject(AuthService);
   readonly credentials = inject(CredentialsService);
   readonly notificationsService = inject(NotificationsService);
+  readonly confirmDialog = inject(ConfirmDialogService);
   readonly router = inject(Router);
   readonly drawer = viewChild<MatSidenav>('drawer');
 
@@ -220,5 +222,20 @@ export class AppShellComponent implements OnInit {
   goToProfile() {
     this.router.navigateByUrl('/profile');
     this.closeIfHandset();
+  }
+
+  logout() {
+    this.confirmDialog
+      .open({
+        title: 'Log out',
+        message: 'Are you sure you want to log out?',
+        confirmText: 'Log out',
+        confirmColor: 'primary',
+      })
+      .subscribe((ok) => {
+        if (ok) {
+          this.auth.logout();
+        }
+      });
   }
 }

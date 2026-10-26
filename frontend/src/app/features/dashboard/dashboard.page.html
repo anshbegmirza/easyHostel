@@ -7,64 +7,122 @@
   </div>
 
   <div class="page-body">
-  @if (loading()) {
-    <div class="page-loader"><mat-spinner diameter="36" /></div>
-  } @else {
-    @if (summary(); as s) {
-      <div class="dash-grid">
-        @if (staff()) {
-          <a class="dash-tile" routerLink="/rooms">
-            <p class="dash-tile__label">Occupancy</p>
-            <p class="dash-tile__value">{{ s.occupancy.occupied_beds }} / {{ s.occupancy.total_beds }}</p>
-            <span class="dash-tile__hint"
-              >{{ s.occupancy.total_rooms }} rooms · {{ s.occupancy.maintenance_rooms }} maintenance</span
-            >
-          </a>
-          <a class="dash-tile" routerLink="/fees">
-            <p class="dash-tile__label">Pending dues</p>
-            <p class="dash-tile__value">₹{{ s.dues.pending_amount | number: '1.0-0' }}</p>
-            <span class="dash-tile__hint">{{ s.dues.pending_count }} open fee(s)</span>
-          </a>
-          <a class="dash-tile" routerLink="/complaints">
-            <p class="dash-tile__label">Open complaints</p>
-            <p class="dash-tile__value">{{ s.complaints.open_count }}</p>
-            <span class="dash-tile__hint">Needs attention</span>
-          </a>
-        } @else if (parent()) {
-          <a class="dash-tile" routerLink="/fees">
-            <p class="dash-tile__label">Linked dues</p>
-            <p class="dash-tile__value">₹{{ s.dues.pending_amount | number: '1.0-0' }}</p>
-            <span class="dash-tile__hint">{{ s.dues.pending_count }} pending</span>
-          </a>
-          <a class="dash-tile" routerLink="/complaints">
-            <p class="dash-tile__label">Open complaints</p>
-            <p class="dash-tile__value">{{ s.complaints.open_count }}</p>
-            <span class="dash-tile__hint">For linked tenants</span>
-          </a>
-          <a class="dash-tile" routerLink="/notices">
-            <p class="dash-tile__label">Notices</p>
-            <p class="dash-tile__value">View</p>
-            <span class="dash-tile__hint">Hostel announcements</span>
-          </a>
-        } @else {
-          <a class="dash-tile" routerLink="/my-room">
-            <p class="dash-tile__label">My room</p>
-            <p class="dash-tile__value">{{ s.my_room || 'None' }}</p>
-            <span class="dash-tile__hint">{{ s.my_room ? 'View allocation' : 'Awaiting allocation' }}</span>
-          </a>
-          <a class="dash-tile" routerLink="/fees">
-            <p class="dash-tile__label">My dues</p>
-            <p class="dash-tile__value">₹{{ s.dues.pending_amount | number: '1.0-0' }}</p>
-            <span class="dash-tile__hint">{{ s.dues.pending_count }} pending</span>
-          </a>
-          <a class="dash-tile" routerLink="/complaints">
-            <p class="dash-tile__label">My complaints</p>
-            <p class="dash-tile__value">{{ s.complaints.open_count }}</p>
-            <span class="dash-tile__hint">Open or in progress</span>
-          </a>
+    @if (loading()) {
+      <div class="page-loader"><mat-spinner diameter="36" /></div>
+    } @else {
+      @if (summary(); as s) {
+        <div class="dash-grid">
+          @if (staff()) {
+            <a class="dash-tile" routerLink="/rooms">
+              <p class="dash-tile__label">Occupancy</p>
+              <p class="dash-tile__value">{{ s.occupancy.occupied_beds }} / {{ s.occupancy.total_beds }}</p>
+              <span class="dash-tile__hint"
+                >{{ s.occupancy.total_rooms }} rooms · {{ s.occupancy.maintenance_rooms }} maintenance</span
+              >
+            </a>
+            <a class="dash-tile" routerLink="/fees">
+              <p class="dash-tile__label">Pending dues</p>
+              <p class="dash-tile__value">₹{{ s.dues.pending_amount | number: '1.0-0' }}</p>
+              <span class="dash-tile__hint">{{ s.dues.pending_count }} open fee(s)</span>
+            </a>
+            <a class="dash-tile" routerLink="/complaints">
+              <p class="dash-tile__label">Open complaints</p>
+              <p class="dash-tile__value">{{ s.complaints.open_count }}</p>
+              <span class="dash-tile__hint">Needs attention</span>
+            </a>
+          } @else if (parent()) {
+            <a class="dash-tile" routerLink="/fees">
+              <p class="dash-tile__label">Linked dues</p>
+              <p class="dash-tile__value">₹{{ s.dues.pending_amount | number: '1.0-0' }}</p>
+              <span class="dash-tile__hint">{{ s.dues.pending_count }} pending</span>
+            </a>
+            <a class="dash-tile" routerLink="/complaints">
+              <p class="dash-tile__label">Open complaints</p>
+              <p class="dash-tile__value">{{ s.complaints.open_count }}</p>
+              <span class="dash-tile__hint">For linked tenants</span>
+            </a>
+            <a class="dash-tile" routerLink="/notices">
+              <p class="dash-tile__label">Notices</p>
+              <p class="dash-tile__value">View</p>
+              <span class="dash-tile__hint">Hostel announcements</span>
+            </a>
+          } @else {
+            <a class="dash-tile" routerLink="/my-room">
+              <p class="dash-tile__label">My room</p>
+              <p class="dash-tile__value">{{ s.my_room || 'None' }}</p>
+              <span class="dash-tile__hint">{{ s.my_room ? 'View allocation' : 'Awaiting allocation' }}</span>
+            </a>
+            <a class="dash-tile" routerLink="/fees">
+              <p class="dash-tile__label">My dues</p>
+              <p class="dash-tile__value">₹{{ s.dues.pending_amount | number: '1.0-0' }}</p>
+              <span class="dash-tile__hint">{{ s.dues.pending_count }} pending</span>
+            </a>
+            <a class="dash-tile" routerLink="/complaints">
+              <p class="dash-tile__label">My complaints</p>
+              <p class="dash-tile__value">{{ s.complaints.open_count }}</p>
+              <span class="dash-tile__hint">Open or in progress</span>
+            </a>
+          }
+        </div>
+      }
+
+      @if (showCharts()) {
+        @if (chartSummary(); as cs) {
+          <p class="section-label">Overview</p>
+          <div class="chart-grid">
+            <div class="chart-card">
+              <div class="title">Occupancy</div>
+              <div class="kpi">{{ cs.occupancy.occupied }} / {{ occupancyTotal(cs) }} beds</div>
+              <div class="cell-muted">{{ occupancyPct(cs) }}% occupied</div>
+              <div class="chart-wrap">
+                <canvas #occCanvas></canvas>
+              </div>
+              <div class="chart-legend">
+                @for (item of occupancyLegend; track item.label) {
+                  <span class="chart-legend__item">
+                    <i class="chart-legend__swatch" [style.background]="item.color"></i>
+                    {{ item.label }}
+                  </span>
+                }
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="title">Fees</div>
+              <div class="kpi">₹{{ cs.fees.due_amount | number: '1.0-0' }} due</div>
+              <div class="cell-muted">
+                {{ cs.fees.due }} due · {{ cs.fees.paid }} paid · {{ cs.fees.waived }} waived
+              </div>
+              <div class="chart-wrap">
+                <canvas #feesCanvas></canvas>
+              </div>
+              <div class="chart-legend">
+                @for (item of feesLegend; track item.label) {
+                  <span class="chart-legend__item">
+                    <i class="chart-legend__swatch" [style.background]="item.color"></i>
+                    {{ item.label }}
+                  </span>
+                }
+              </div>
+            </div>
+            <div class="chart-card">
+              <div class="title">Complaints</div>
+              <div class="kpi">{{ cs.complaints.open }} open</div>
+              <div class="cell-muted">{{ complaintsTotal(cs) }} total</div>
+              <div class="chart-wrap">
+                <canvas #complaintsCanvas></canvas>
+              </div>
+              <div class="chart-legend">
+                @for (item of complaintsLegend; track item.label) {
+                  <span class="chart-legend__item">
+                    <i class="chart-legend__swatch" [style.background]="item.color"></i>
+                    {{ item.label }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
         }
-      </div>
+      }
     }
-  }
   </div>
 </section>

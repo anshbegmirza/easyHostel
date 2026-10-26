@@ -12,7 +12,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { finalize } from 'rxjs/operators';
 import { AppConfigService } from '../core/config/app-config.service';
-import { AuthService } from '../core/authentication/auth.service';
+import { AuthResponse, AuthService } from '../core/authentication/auth.service';
+import { ToastService } from '../core/toast.service';
 import { ThemeMenuComponent } from '../shared/theme-menu/theme-menu.component';
 import { PwaInstallBannerComponent } from '../shared/pwa-install-banner/pwa-install-banner.component';
 import { loadGoogleIdentityScript } from '../core/authentication/google-identity';
@@ -45,11 +46,13 @@ export class LoginComponent implements OnInit {
   private auth = inject(AuthService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private toast = inject(ToastService);
   appConfig = inject(AppConfigService);
 
   loading = signal(false);
   error = signal('');
   useRealGoogle = signal(false);
+  hidePassword = signal(true);
 
   form = this.fb.nonNullable.group({
     username: ['', Validators.required],
@@ -66,6 +69,9 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
+    if (this.loading()) {
+      return;
+    }
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -79,9 +85,7 @@ export class LoginComponent implements OnInit {
       .login(username, password, remember)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
-        next: (res) => {
-          this.router.navigateByUrl(this.auth.homePathForRole(res.user.role));
-        },
+        next: (res) => this.onLoginSuccess(res),
         error: (err) => {
           this.error.set(err?.error?.message || 'Incorrect username or password.');
         },
@@ -136,12 +140,16 @@ export class LoginComponent implements OnInit {
       .loginWithGoogle(payload)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
-        next: (res) => {
-          this.router.navigateByUrl(this.auth.homePathForRole(res.user.role));
-        },
+        next: (res) => this.onLoginSuccess(res),
         error: (err) => {
           this.error.set(err?.error?.message || 'Google sign-in failed.');
         },
       });
+  }
+
+  private onLoginSuccess(res: AuthResponse) {
+    const name = res.user.username || res.user.name;
+    this.toast.success(`Welcome ${name}`);
+    this.router.navigateByUrl(this.auth.homePathForRole(res.user.role));
   }
 }

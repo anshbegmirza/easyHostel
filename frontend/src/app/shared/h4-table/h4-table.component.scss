@@ -1,6 +1,9 @@
 .dt-table {
   min-height: 320px;
 }
+.dt-table__bar {
+  display: block;
+}
 .dt-table__toolbar {
   display: flex;
   flex-wrap: wrap;

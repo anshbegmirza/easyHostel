@@ -30,7 +30,7 @@
         <div class="meta">
           <div><span class="label">Capacity</span> {{ r.capacity }}</div>
           @if (startDate()) {
-            <div><span class="label">Since</span> {{ startDate() }}</div>
+            <div><span class="label">Since</span> {{ startDate() | date: 'mediumDate' }}</div>
           }
         </div>
       </div>

@@ -72,6 +72,70 @@ INSERT INTO users (
   (1, 'student8', 'student8@easyhostel4.local', 'Mirza Malik',
    '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
    'tenant', 'active', 'local', '9876511008'),
+  -- Action-wing demo tenants (Stallone / Schwarzenegger / Cruise characters). Password: std@123
+  (1, 'alex', 'alex@easyhostel4.local', 'Alex Stone',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512001'),
+  (1, 'rambo', 'rambo@easyhostel4.local', 'John Rambo',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512002'),
+  (1, 'michael', 'michael@easyhostel4.local', 'Michael Jennings',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512003'),
+  (1, 'lincoln', 'lincoln@easyhostel4.local', 'Lincoln Hawk',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512004'),
+  (1, 'trench', 'trench@easyhostel4.local', 'Trench',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512005'),
+  (1, 'barney', 'barney@easyhostel4.local', 'Barney Ross',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512006'),
+  (1, 'thorn', 'thorn@easyhostel4.local', 'Thorn',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512007'),
+  (1, 'decha', 'decha@easyhostel4.local', 'Decha Unai',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512008'),
+  (1, 'bonaparte', 'bonaparte@easyhostel4.local', 'Bonaparte',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512009'),
+  (1, 'rocky', 'rocky@easyhostel4.local', 'Rocky Balboa',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512010'),
+  (1, 'dutch', 'dutch@easyhostel4.local', 'Dutch Schaefer',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512011'),
+  (1, 'matrix', 'matrix@easyhostel4.local', 'John Matrix',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512012'),
+  (1, 'quaid', 'quaid@easyhostel4.local', 'Douglas Quaid',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512013'),
+  (1, 'ethan', 'ethan@easyhostel4.local', 'Ethan Hunt',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512014'),
+  (1, 'reacher', 'reacher@easyhostel4.local', 'Jack Reacher',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512015'),
+  (1, 'christmas', 'christmas@easyhostel4.local', 'Lee Christmas',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512016'),
+  (1, 'spartan', 'spartan@easyhostel4.local', 'John Spartan',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512017'),
+  (1, 'slater', 'slater@easyhostel4.local', 'Jack Slater',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512018'),
+  (1, 'tasker', 'tasker@easyhostel4.local', 'Harry Tasker',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512019'),
+  (1, 'miller', 'miller@easyhostel4.local', 'Roy Miller',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512020'),
+  (1, 'trickle', 'trickle@easyhostel4.local', 'Cole Trickle',
+   '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
+   'tenant', 'active', 'local', '9876512021'),
   (1, 'pending1', 'pending1@easyhostel4.local', 'Rahul Mehta',
    '$2b$10$.cSgnXQH8I6BRVv5jYnnZe.4FYwM3ShyCM0xvWWmAnw0NVK.l8x6q',
    'tenant', 'pending', 'local', '9876511099'),
@@ -137,7 +201,11 @@ INSERT INTO rooms (hostel_id, code, capacity, status) VALUES
   (1, 'C301', 2, 'available'),
   (1, 'C302', 2, 'available'),
   (1, 'C303', 1, 'available'),
-  (1, 'C304', 2, 'available')
+  (1, 'C304', 2, 'available'),
+  (1, 'D401', 2, 'available'),
+  (1, 'D402', 2, 'available'),
+  (1, 'D403', 3, 'available'),
+  (1, 'D404', 2, 'available')
 ON DUPLICATE KEY UPDATE
   capacity = VALUES(capacity),
   status = VALUES(status);
@@ -214,6 +282,187 @@ WHERE r.hostel_id = 1 AND r.code = 'C301'
   );
 
 -- student8 left unallocated on purpose (allocate / room-change demos)
+-- Action-wing allocations (alex / thorn / bonaparte left unallocated for allocate demos)
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 40 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'rambo'
+WHERE r.hostel_id = 1 AND r.code = 'A102'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 35 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'lincoln'
+WHERE r.hostel_id = 1 AND r.code = 'A104'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 34 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'trench'
+WHERE r.hostel_id = 1 AND r.code = 'A104'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 33 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'barney'
+WHERE r.hostel_id = 1 AND r.code = 'A105'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 32 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'decha'
+WHERE r.hostel_id = 1 AND r.code = 'A105'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 31 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'rocky'
+WHERE r.hostel_id = 1 AND r.code = 'A105'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 28 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'dutch'
+WHERE r.hostel_id = 1 AND r.code = 'B203'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 27 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'matrix'
+WHERE r.hostel_id = 1 AND r.code = 'B204'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 26 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'quaid'
+WHERE r.hostel_id = 1 AND r.code = 'B204'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 25 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'ethan'
+WHERE r.hostel_id = 1 AND r.code = 'B204'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 24 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'reacher'
+WHERE r.hostel_id = 1 AND r.code = 'C301'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 23 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'christmas'
+WHERE r.hostel_id = 1 AND r.code = 'C302'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 22 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'spartan'
+WHERE r.hostel_id = 1 AND r.code = 'C302'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 21 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'slater'
+WHERE r.hostel_id = 1 AND r.code = 'C303'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 19 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'tasker'
+WHERE r.hostel_id = 1 AND r.code = 'C304'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 18 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'miller'
+WHERE r.hostel_id = 1 AND r.code = 'C304'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 17 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'michael'
+WHERE r.hostel_id = 1 AND r.code = 'D401'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
+
+INSERT INTO allocations (hostel_id, room_id, user_id, start_date, active)
+SELECT 1, r.id, u.id, DATE_SUB(CURDATE(), INTERVAL 16 DAY), 1
+FROM rooms r
+JOIN users u ON u.hostel_id = 1 AND u.username = 'trickle'
+WHERE r.hostel_id = 1 AND r.code = 'D401'
+  AND NOT EXISTS (
+    SELECT 1 FROM allocations a
+    WHERE a.hostel_id = 1 AND a.user_id = u.id AND a.active = 1
+  );
 
 UPDATE rooms r
 SET status = 'available'
@@ -233,7 +482,11 @@ WHERE r.hostel_id = 1 AND r.status <> 'maintenance';
 INSERT INTO fees (hostel_id, user_id, period_label, amount, status, due_date)
 SELECT 1, u.id, 'Jul 2026', 8500.00, 'paid', DATE_SUB(CURDATE(), INTERVAL 80 DAY)
 FROM users u
-WHERE u.hostel_id = 1 AND u.username IN ('student1','student2','student3','student4','student5','student6','student7')
+WHERE u.hostel_id = 1 AND u.username IN (
+    'student1','student2','student3','student4','student5','student6','student7',
+    'rambo','lincoln','trench','barney','decha','rocky','dutch','matrix','quaid',
+    'ethan','reacher','christmas','spartan','slater','tasker','miller','michael','trickle'
+  )
   AND NOT EXISTS (
     SELECT 1 FROM fees f
     WHERE f.hostel_id = 1 AND f.user_id = u.id AND f.period_label = 'Jul 2026'
@@ -242,7 +495,11 @@ WHERE u.hostel_id = 1 AND u.username IN ('student1','student2','student3','stude
 INSERT INTO fees (hostel_id, user_id, period_label, amount, status, due_date)
 SELECT 1, u.id, 'Aug 2026', 8500.00, 'paid', DATE_SUB(CURDATE(), INTERVAL 45 DAY)
 FROM users u
-WHERE u.hostel_id = 1 AND u.username IN ('student1','student2','student3','student4','student5','student6','student7')
+WHERE u.hostel_id = 1 AND u.username IN (
+    'student1','student2','student3','student4','student5','student6','student7',
+    'rambo','lincoln','trench','barney','decha','rocky','dutch','matrix','quaid',
+    'ethan','reacher','christmas','spartan','slater','tasker','miller','michael','trickle'
+  )
   AND NOT EXISTS (
     SELECT 1 FROM fees f
     WHERE f.hostel_id = 1 AND f.user_id = u.id AND f.period_label = 'Aug 2026'
@@ -251,7 +508,11 @@ WHERE u.hostel_id = 1 AND u.username IN ('student1','student2','student3','stude
 INSERT INTO fees (hostel_id, user_id, period_label, amount, status, due_date)
 SELECT 1, u.id, 'Sep 2026', 8500.00, 'due', DATE_ADD(CURDATE(), INTERVAL 7 DAY)
 FROM users u
-WHERE u.hostel_id = 1 AND u.username IN ('student1','student2','student3','student4','student6','student7')
+WHERE u.hostel_id = 1 AND u.username IN (
+    'student1','student2','student3','student4','student6','student7',
+    'rambo','lincoln','trench','barney','decha','rocky','dutch','matrix','quaid',
+    'ethan','reacher','christmas','spartan','slater','tasker','miller','michael','trickle'
+  )
   AND NOT EXISTS (
     SELECT 1 FROM fees f
     WHERE f.hostel_id = 1 AND f.user_id = u.id AND f.period_label = 'Sep 2026'
@@ -368,6 +629,36 @@ WHERE u.hostel_id = 1 AND u.username = 'student7'
     WHERE c.hostel_id = 1 AND c.user_id = u.id AND c.title = 'Door lock sticky'
   );
 
+INSERT INTO complaints (hostel_id, user_id, title, description, priority, status, sla_due_at)
+SELECT 1, u.id, 'Gym weights missing', 'Bench press plates gone from the action-wing gym.', 'medium', 'open',
+       DATE_ADD(NOW(), INTERVAL 48 HOUR)
+FROM users u
+WHERE u.hostel_id = 1 AND u.username = 'rambo'
+  AND NOT EXISTS (
+    SELECT 1 FROM complaints c
+    WHERE c.hostel_id = 1 AND c.user_id = u.id AND c.title = 'Gym weights missing'
+  );
+
+INSERT INTO complaints (hostel_id, user_id, title, description, priority, status, sla_due_at)
+SELECT 1, u.id, 'Corridor lights out', 'D-block corridor pitch black after 10pm.', 'high', 'open',
+       DATE_ADD(NOW(), INTERVAL 24 HOUR)
+FROM users u
+WHERE u.hostel_id = 1 AND u.username = 'dutch'
+  AND NOT EXISTS (
+    SELECT 1 FROM complaints c
+    WHERE c.hostel_id = 1 AND c.user_id = u.id AND c.title = 'Corridor lights out'
+  );
+
+INSERT INTO complaints (hostel_id, user_id, title, description, priority, status, sla_due_at)
+SELECT 1, u.id, 'Locker jammed shut', 'Unable to open assigned locker near C302.', 'low', 'in_progress',
+       DATE_ADD(NOW(), INTERVAL 72 HOUR)
+FROM users u
+WHERE u.hostel_id = 1 AND u.username = 'ethan'
+  AND NOT EXISTS (
+    SELECT 1 FROM complaints c
+    WHERE c.hostel_id = 1 AND c.user_id = u.id AND c.title = 'Locker jammed shut'
+  );
+
 INSERT INTO complaint_events (hostel_id, complaint_id, actor_user_id, status, note)
 SELECT c.hostel_id, c.id, c.user_id, 'open', 'Complaint created'
 FROM complaints c
@@ -378,7 +669,7 @@ WHERE c.hostel_id = 1
 INSERT INTO complaint_events (hostel_id, complaint_id, actor_user_id, status, note)
 SELECT c.hostel_id, c.id, s.id, 'in_progress', 'Assigned to maintenance desk'
 FROM complaints c
-JOIN users u ON u.id = c.user_id AND u.username IN ('student2', 'student7')
+JOIN users u ON u.id = c.user_id AND u.username IN ('student2', 'student7', 'ethan')
 JOIN users s ON s.hostel_id = 1 AND s.username = 'staff1'
 WHERE c.hostel_id = 1 AND c.status = 'in_progress'
   AND NOT EXISTS (
@@ -468,7 +759,7 @@ WHERE u.hostel_id = 1 AND u.username = 'superuser'
 
 INSERT INTO notices (hostel_id, title, body, created_by)
 SELECT 1, 'September fee reminder',
-  'Sep 2026 hostel fees are due within 7 days. Pay via UPI/card in the Fees module or at the office.',
+  'Sep 2026 hostel fees are due within 7 days. Pay at the office / front desk; staff will mark paid in Fees.',
   u.id
 FROM users u
 WHERE u.hostel_id = 1 AND u.username = 'admin1'

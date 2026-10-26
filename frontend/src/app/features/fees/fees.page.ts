@@ -10,6 +10,8 @@ import { isParentRole, isStaffRole } from '../../core/roles';
 import { H4TableComponent } from '../../shared/h4-table/h4-table.component';
 import { H4TableAction, H4TableColumn, H4TableFilter } from '../../shared/h4-table/h4-table.types';
 import { FeeFormDialogComponent } from './fee-form-dialog.component';
+import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
+import { ToastService } from '../../core/toast.service';
 
 @Component({
   selector: 'app-fees-page',
@@ -22,6 +24,8 @@ export class FeesPageComponent implements OnInit {
   readonly rooms = inject(RoomsService);
   readonly auth = inject(AuthService);
   readonly dialog = inject(MatDialog);
+  readonly confirmDialog = inject(ConfirmDialogService);
+  readonly toast = inject(ToastService);
   readonly router = inject(Router);
 
   readonly loading = signal(true);
@@ -115,7 +119,12 @@ export class FeesPageComponent implements OnInit {
                 period_label: value.periodLabel,
                 amount: value.amount,
               })
-              .subscribe({ next: () => this.reload() });
+              .subscribe({
+                next: () => {
+                  this.toast.success('Fee created');
+                  this.reload();
+                },
+              });
           });
       },
     });
@@ -123,13 +132,44 @@ export class FeesPageComponent implements OnInit {
 
   onAction(event: { actionId: string; row: Fee }) {
     if (event.actionId === 'paid') {
-      this.api.updateStatus(event.row.id, { status: 'paid', method: 'manual' }).subscribe({
-        next: () => this.reload(),
-      });
+      this.confirmDialog
+        .open({
+          title: 'Mark as paid',
+          message: `Mark fee for ${event.row.period_label} as paid?`,
+          confirmText: 'Mark paid',
+        })
+        .subscribe((ok) => {
+          if (!ok) {
+            return;
+          }
+          this.api.updateStatus(event.row.id, { status: 'paid', method: 'manual' }).subscribe({
+            next: () => {
+              this.toast.success('Fee marked as paid');
+              this.reload();
+            },
+          });
+        });
       return;
     }
     if (event.actionId === 'waive') {
-      this.api.updateStatus(event.row.id, { status: 'waived' }).subscribe({ next: () => this.reload() });
+      this.confirmDialog
+        .open({
+          title: 'Waive fee',
+          message: `Waive fee for ${event.row.period_label}?`,
+          confirmText: 'Waive',
+          confirmColor: 'warn',
+        })
+        .subscribe((ok) => {
+          if (!ok) {
+            return;
+          }
+          this.api.updateStatus(event.row.id, { status: 'waived' }).subscribe({
+            next: () => {
+              this.toast.success('Fee waived');
+              this.reload();
+            },
+          });
+        });
       return;
     }
     if (event.actionId === 'receipt') {

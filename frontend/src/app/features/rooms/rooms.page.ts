@@ -9,6 +9,7 @@ import { AllocateRoomDialogComponent } from './allocate-room-dialog.component';
 import { RoomAllocationsDialogComponent } from './room-allocations-dialog.component';
 import { RoomFormDialogComponent } from './room-form-dialog.component';
 import { RoomStatusDialogComponent } from './room-status-dialog.component';
+import { ToastService } from '../../core/toast.service';
 
 @Component({
   selector: 'app-rooms-page',
@@ -19,6 +20,7 @@ import { RoomStatusDialogComponent } from './room-status-dialog.component';
 export class RoomsPageComponent implements OnInit {
   readonly api = inject(RoomsService);
   readonly dialog = inject(MatDialog);
+  readonly toast = inject(ToastService);
 
   readonly loading = signal(true);
   readonly rooms = signal<Room[]>([]);
@@ -89,7 +91,12 @@ export class RoomsPageComponent implements OnInit {
         if (!value) {
           return;
         }
-        this.api.create(value).subscribe({ next: () => this.reload() });
+        this.api.create(value).subscribe({
+          next: () => {
+            this.toast.success('Room created');
+            this.reload();
+          },
+        });
       });
   }
 
@@ -121,7 +128,10 @@ export class RoomsPageComponent implements OnInit {
               return;
             }
             this.api.allocate({ room_id: room.id, user_id: value.userId }).subscribe({
-              next: () => this.reload(),
+              next: () => {
+                this.toast.success('Tenant allocated');
+                this.reload();
+              },
             });
           });
       },
@@ -148,7 +158,12 @@ export class RoomsPageComponent implements OnInit {
         if (!value?.status) {
           return;
         }
-        this.api.update(room.id, { status: value.status }).subscribe({ next: () => this.reload() });
+        this.api.update(room.id, { status: value.status }).subscribe({
+          next: () => {
+            this.toast.success('Room status updated');
+            this.reload();
+          },
+        });
       });
   }
 }

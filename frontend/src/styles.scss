@@ -35,8 +35,8 @@ a.mat-mdc-button-base {
 }
 
 
-.mat-mdc-unelevated-button.mat-primary,
-.mat-mdc-raised-button.mat-primary {
+.mat-mdc-unelevated-button.mat-primary:not(:disabled),
+.mat-mdc-raised-button.mat-primary:not(:disabled) {
   --mdc-filled-button-container-color: var(--color-cta);
   --mdc-filled-button-label-text-color: var(--color-on-cta);
   --mdc-protected-button-container-color: var(--color-cta);
@@ -45,9 +45,16 @@ a.mat-mdc-button-base {
   color: var(--color-on-cta) !important;
 }
 
-.mat-mdc-unelevated-button.mat-primary .mat-icon,
-.mat-mdc-raised-button.mat-primary .mat-icon {
+.mat-mdc-unelevated-button.mat-primary:not(:disabled) .mat-icon,
+.mat-mdc-raised-button.mat-primary:not(:disabled) .mat-icon {
   color: var(--color-on-cta) !important;
+}
+
+.mat-mdc-unelevated-button.mat-primary:disabled,
+.mat-mdc-raised-button.mat-primary:disabled {
+  background-color: #9e9e9e !important;
+  color: #f5f5f5 !important;
+  opacity: 0.7;
 }
 
 .mat-mdc-checkbox.mat-primary {
@@ -75,4 +82,19 @@ a.mat-mdc-button-base {
 .mat-mdc-dialog-actions {
   min-height: 53px;
   padding: 8px 16px 12px !important;
+}
+
+/* Toasts — top-right, below the shell topbar */
+.mat-mdc-snack-bar-container.toast-panel {
+  margin-top: calc(var(--topbar-height) + 8px) !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  --mdc-snackbar-container-color: transparent;
+  --mdc-snackbar-supporting-text-color: inherit;
+}
+
+.mat-mdc-snack-bar-container.toast-panel .mdc-snackbar__surface {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }

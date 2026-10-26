@@ -15,6 +15,7 @@ import { ThemeMenuComponent } from '../shared/theme-menu/theme-menu.component';
 import { PwaInstallBannerComponent } from '../shared/pwa-install-banner/pwa-install-banner.component';
 import { loadGoogleIdentityScript } from '../core/authentication/google-identity';
 import { TestGoogleDialogComponent } from './test-google-dialog.component';
+import { ToastService } from '../core/toast.service';
 
 @Component({
   selector: 'app-signup',
@@ -41,6 +42,7 @@ export class SignupComponent implements OnInit {
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private fb = inject(FormBuilder);
+  private toast = inject(ToastService);
   appConfig = inject(AppConfigService);
 
   loading = signal(false);
@@ -75,7 +77,9 @@ export class SignupComponent implements OnInit {
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (res) => {
-          this.success.set(res.message || 'Registration submitted. Await admin approval.');
+          const msg = res.message || 'Registration submitted. Await admin approval.';
+          this.success.set(msg);
+          this.toast.success(msg);
           this.form.reset({ name: '', email: '', username: '', password: '' });
         },
         error: (err) => {

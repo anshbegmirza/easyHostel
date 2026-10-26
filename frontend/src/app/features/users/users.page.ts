@@ -12,6 +12,8 @@ import {
   UserDialogComponent,
   UserDialogMode,
 } from './user-dialog.component';
+import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
+import { ToastService } from '../../core/toast.service';
 
 @Component({
   selector: 'app-users-page',
@@ -23,6 +25,8 @@ export class UsersPageComponent implements OnInit {
   readonly api = inject(UsersService);
   readonly rooms = inject(RoomsService);
   readonly dialog = inject(MatDialog);
+  readonly confirmDialog = inject(ConfirmDialogService);
+  readonly toast = inject(ToastService);
 
   readonly loading = signal(true);
   readonly users = signal<AppUser[]>([]);
@@ -112,7 +116,12 @@ export class UsersPageComponent implements OnInit {
         if (!value) {
           return;
         }
-        this.api.createTenant(value).subscribe({ next: () => this.reload() });
+        this.api.createTenant(value).subscribe({
+          next: () => {
+            this.toast.success('Tenant created');
+            this.reload();
+          },
+        });
       });
   }
 
@@ -135,7 +144,12 @@ export class UsersPageComponent implements OnInit {
                 password: value.password,
                 tenant_ids: value.tenantIds,
               })
-              .subscribe({ next: () => this.reload() });
+              .subscribe({
+                next: () => {
+                  this.toast.success('Parent created');
+                  this.reload();
+                },
+              });
           });
       },
     });
@@ -150,6 +164,7 @@ export class UsersPageComponent implements OnInit {
       .afterClosed()
       .subscribe((saved) => {
         if (saved) {
+          this.toast.success('User updated');
           this.reload();
         }
       });
@@ -165,11 +180,44 @@ export class UsersPageComponent implements OnInit {
       return;
     }
     if (event.actionId === 'approve') {
-      this.api.approve(event.row.id).subscribe({ next: () => this.reload() });
+      this.confirmDialog
+        .open({
+          title: 'Approve user',
+          message: `Approve ${event.row.name}?`,
+          confirmText: 'Approve',
+        })
+        .subscribe((ok) => {
+          if (!ok) {
+            return;
+          }
+          this.api.approve(event.row.id).subscribe({
+            next: () => {
+              this.toast.success('User approved');
+              this.reload();
+            },
+          });
+        });
       return;
     }
     if (event.actionId === 'reject') {
-      this.api.reject(event.row.id).subscribe({ next: () => this.reload() });
+      this.confirmDialog
+        .open({
+          title: 'Reject user',
+          message: `Reject ${event.row.name}?`,
+          confirmText: 'Reject',
+          confirmColor: 'warn',
+        })
+        .subscribe((ok) => {
+          if (!ok) {
+            return;
+          }
+          this.api.reject(event.row.id).subscribe({
+            next: () => {
+              this.toast.success('User rejected');
+              this.reload();
+            },
+          });
+        });
     }
   }
 }

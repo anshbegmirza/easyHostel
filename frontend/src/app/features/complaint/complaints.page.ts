@@ -9,6 +9,7 @@ import { isParentRole, isStaffRole, isTenantRole } from '../../core/roles';
 import { H4TableComponent } from '../../shared/h4-table/h4-table.component';
 import { H4TableAction, H4TableColumn, H4TableFilter } from '../../shared/h4-table/h4-table.types';
 import { ComplaintDialogComponent } from './complaint-dialog/complaint-dialog.component';
+import { ToastService } from '../../core/toast.service';
 
 @Component({
   selector: 'app-complaints-page',
@@ -20,6 +21,7 @@ export class ComplaintsPageComponent implements OnInit {
   readonly api = inject(ComplaintsService);
   readonly auth = inject(AuthService);
   readonly dialog = inject(MatDialog);
+  readonly toast = inject(ToastService);
   readonly router = inject(Router);
 
   readonly loading = signal(true);
@@ -111,7 +113,12 @@ export class ComplaintsPageComponent implements OnInit {
         if (value.photo) {
           form.append('photo', value.photo);
         }
-        this.api.create(form).subscribe({ next: () => this.reload() });
+        this.api.create(form).subscribe({
+          next: () => {
+            this.toast.success('Complaint submitted');
+            this.reload();
+          },
+        });
       });
   }
 

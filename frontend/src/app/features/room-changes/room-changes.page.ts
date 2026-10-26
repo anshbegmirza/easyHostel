@@ -9,6 +9,7 @@ import { isStaffRole } from '../../core/roles';
 import { H4TableComponent } from '../../shared/h4-table/h4-table.component';
 import { H4TableAction, H4TableColumn, H4TableFilter } from '../../shared/h4-table/h4-table.types';
 import { DecideRoomChangeDialogComponent } from './decide-room-change-dialog.component';
+import { ToastService } from '../../core/toast.service';
 
 @Component({
   selector: 'app-room-changes-page',
@@ -21,6 +22,7 @@ export class RoomChangesPageComponent implements OnInit {
   readonly rooms = inject(RoomsService);
   readonly auth = inject(AuthService);
   readonly dialog = inject(MatDialog);
+  readonly toast = inject(ToastService);
 
   readonly loading = signal(true);
   readonly staff = signal(false);
@@ -110,7 +112,12 @@ export class RoomChangesPageComponent implements OnInit {
               staff_note: value.staffNote,
               to_room_id: approve ? value.toRoomId : undefined,
             })
-            .subscribe({ next: () => this.reload() });
+            .subscribe({
+              next: () => {
+                this.toast.success(approve ? 'Room change approved' : 'Room change rejected');
+                this.reload();
+              },
+            });
         });
     };
 

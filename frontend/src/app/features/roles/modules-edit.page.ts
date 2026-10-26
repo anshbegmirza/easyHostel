@@ -15,6 +15,8 @@ import {
 } from './service/roles.service';
 import { AppUser } from '../users/service/users.service';
 import { prettyStatus } from '../../shared/status.util';
+import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
+import { ToastService } from '../../core/toast.service';
 
 type EditMode = 'user' | 'template' | 'template-create';
 
@@ -46,6 +48,8 @@ export class ModulesEditPageComponent implements OnInit {
   readonly route = inject(ActivatedRoute);
   readonly router = inject(Router);
   readonly api = inject(RolesService);
+  readonly confirmDialog = inject(ConfirmDialogService);
+  readonly toast = inject(ToastService);
   readonly pretty = prettyStatus;
   readonly roleOptions = ROLE_OPTIONS;
 
@@ -212,20 +216,32 @@ export class ModulesEditPageComponent implements OnInit {
     if (!this.applyTemplateId) {
       return;
     }
-    this.applying.set(true);
-    this.api.getTemplate(this.applyTemplateId).subscribe({
-      next: (res) => {
-        const granted = new Set(res.modules.filter((m) => m.granted).map((m) => m.code));
-        this.modules.update((list) =>
-          list.map((m) => ({
-            ...m,
-            granted: this.isLocked(m.code) ? false : granted.has(m.code),
-          }))
-        );
-        this.applying.set(false);
-      },
-      error: () => this.applying.set(false),
-    });
+    this.confirmDialog
+      .open({
+        title: 'Apply template',
+        message: 'Apply this template? Current module selections will be replaced. Save afterwards to keep the changes.',
+        confirmText: 'Apply',
+      })
+      .subscribe((ok) => {
+        if (!ok) {
+          return;
+        }
+        this.applying.set(true);
+        this.api.getTemplate(this.applyTemplateId).subscribe({
+          next: (res) => {
+            const granted = new Set(res.modules.filter((m) => m.granted).map((m) => m.code));
+            this.modules.update((list) =>
+              list.map((m) => ({
+                ...m,
+                granted: this.isLocked(m.code) ? false : granted.has(m.code),
+              }))
+            );
+            this.applying.set(false);
+            this.toast.success('Template applied — save to keep changes');
+          },
+          error: () => this.applying.set(false),
+        });
+      });
   }
 
   save() {
@@ -243,6 +259,7 @@ export class ModulesEditPageComponent implements OnInit {
       this.api.saveUserGrants(u.id, codes).subscribe({
         next: () => {
           this.saving.set(false);
+          this.toast.success('Permissions saved');
           this.router.navigate(['/user-roles']);
         },
         error: () => this.saving.set(false),
@@ -260,6 +277,7 @@ export class ModulesEditPageComponent implements OnInit {
         .subscribe({
           next: () => {
             this.saving.set(false);
+            this.toast.success('Template created');
             this.router.navigate(['/templates']);
           },
           error: () => this.saving.set(false),
@@ -281,6 +299,7 @@ export class ModulesEditPageComponent implements OnInit {
       .subscribe({
         next: () => {
           this.saving.set(false);
+          this.toast.success('Template saved');
           this.router.navigate(['/templates']);
         },
         error: () => this.saving.set(false),

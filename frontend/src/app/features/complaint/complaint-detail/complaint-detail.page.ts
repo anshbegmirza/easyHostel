@@ -14,6 +14,7 @@ import { AuthService } from '../../../core/authentication/auth.service';
 import { isStaffRole } from '../../../core/roles';
 import { StatusIconComponent } from '../../../shared/status-icon.component';
 import { prettyStatus, statusTone } from '../../../shared/status.util';
+import { ToastService } from '../../../core/toast.service';
 
 @Component({
   selector: 'app-complaint-detail-page',
@@ -38,6 +39,7 @@ export class ComplaintDetailPageComponent implements OnInit, OnDestroy {
   readonly auth = inject(AuthService);
   readonly route = inject(ActivatedRoute);
   readonly fb = inject(FormBuilder);
+  readonly toast = inject(ToastService);
 
   readonly loading = signal(true);
   readonly busy = signal(false);
@@ -102,6 +104,7 @@ export class ComplaintDetailPageComponent implements OnInit, OnDestroy {
         this.complaint.set(res.complaint);
         this.events.set(res.events);
         this.busy.set(false);
+        this.toast.success('Complaint updated');
       },
       error: () => this.busy.set(false),
     });

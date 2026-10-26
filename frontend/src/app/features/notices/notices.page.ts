@@ -7,6 +7,8 @@ import { AuthService } from '../../core/authentication/auth.service';
 import { isStaffRole } from '../../core/roles';
 import { H4TableComponent } from '../../shared/h4-table/h4-table.component';
 import { H4TableAction, H4TableColumn } from '../../shared/h4-table/h4-table.types';
+import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
+import { ToastService } from '../../core/toast.service';
 import { NoticeFormDialogComponent } from './notice-form-dialog.component';
 
 @Component({
@@ -19,6 +21,8 @@ export class NoticesPageComponent implements OnInit {
   readonly api = inject(NoticesService);
   readonly auth = inject(AuthService);
   readonly dialog = inject(MatDialog);
+  readonly confirmDialog = inject(ConfirmDialogService);
+  readonly toast = inject(ToastService);
 
   readonly loading = signal(true);
   readonly staff = signal(false);
@@ -67,13 +71,36 @@ export class NoticesPageComponent implements OnInit {
         if (!value) {
           return;
         }
-        this.api.create(value).subscribe({ next: () => this.reload() });
+        this.api.create(value).subscribe({
+          next: () => {
+            this.toast.success('Notice created');
+            this.reload();
+          },
+        });
       });
   }
 
   onAction(event: { actionId: string; row: Notice }) {
-    if (event.actionId === 'delete') {
-      this.api.remove(event.row.id).subscribe({ next: () => this.reload() });
+    if (event.actionId !== 'delete') {
+      return;
     }
+    this.confirmDialog
+      .open({
+        title: 'Delete notice',
+        message: `Delete “${event.row.title}”? This cannot be undone.`,
+        confirmText: 'Delete',
+        confirmColor: 'warn',
+      })
+      .subscribe((ok) => {
+        if (!ok) {
+          return;
+        }
+        this.api.remove(event.row.id).subscribe({
+          next: () => {
+            this.toast.success('Notice deleted');
+            this.reload();
+          },
+        });
+      });
   }
 }

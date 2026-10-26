@@ -2,30 +2,116 @@
   <div class="page-actionbar">
     <div class="page-actionbar__title">
       <h1>Reports</h1>
-      <p>Download occupancy, fees, and complaints</p>
+      <p>Overview and exports</p>
+      @if (updatedAt(); as t) {
+        <p class="updated">Last updated just now</p>
+      }
     </div>
   </div>
 
   <div class="page-body">
-    <div class="report-grid">
-      @for (row of kinds; track row.kind) {
-        <div class="report-row">
-          <div>
-            <div class="title">{{ row.label }}</div>
-            <div class="cell-muted">{{ row.hint }}</div>
+    @if (loading()) {
+      <div class="page-loader"><mat-spinner diameter="36" /></div>
+    } @else {
+      @if (summary(); as s) {
+      <p class="section-label">Overview</p>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-card__head">
+            <div>
+              <div class="title">Occupancy</div>
+              <div class="kpi">{{ s.occupancy.occupied }} / {{ occupancyTotal(s) }} beds</div>
+              <div class="cell-muted">{{ occupancyPct(s) }}% occupied</div>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas #occCanvas></canvas>
+          </div>
+          <div class="chart-legend">
+            @for (item of occupancyLegend; track item.label) {
+              <span class="chart-legend__item">
+                <i class="chart-legend__swatch" [style.background]="item.color"></i>
+                {{ item.label }}
+              </span>
+            }
           </div>
           <div class="btns">
-            <button mat-stroked-button type="button" (click)="download(row.kind, 'xlsx')">
+            <button mat-stroked-button type="button" (click)="download('occupancy', 'xlsx')">
               <mat-icon>table_view</mat-icon>
               Excel
             </button>
-            <button mat-flat-button color="primary" type="button" (click)="download(row.kind, 'pdf')">
+            <button mat-flat-button color="primary" type="button" (click)="download('occupancy', 'pdf')">
               <mat-icon>picture_as_pdf</mat-icon>
               PDF
             </button>
           </div>
         </div>
+
+        <div class="chart-card">
+          <div class="chart-card__head">
+            <div>
+              <div class="title">Fees</div>
+              <div class="kpi">₹{{ s.fees.due_amount | number: '1.0-0' }} due</div>
+              <div class="cell-muted">
+                {{ s.fees.due }} due · {{ s.fees.paid }} paid · {{ s.fees.waived }} waived
+              </div>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas #feesCanvas></canvas>
+          </div>
+          <div class="chart-legend">
+            @for (item of feesLegend; track item.label) {
+              <span class="chart-legend__item">
+                <i class="chart-legend__swatch" [style.background]="item.color"></i>
+                {{ item.label }}
+              </span>
+            }
+          </div>
+          <div class="btns">
+            <button mat-stroked-button type="button" (click)="download('fees', 'xlsx')">
+              <mat-icon>table_view</mat-icon>
+              Excel
+            </button>
+            <button mat-flat-button color="primary" type="button" (click)="download('fees', 'pdf')">
+              <mat-icon>picture_as_pdf</mat-icon>
+              PDF
+            </button>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-card__head">
+            <div>
+              <div class="title">Complaints</div>
+              <div class="kpi">{{ s.complaints.open }} open</div>
+              <div class="cell-muted">{{ complaintsTotal(s) }} total</div>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas #complaintsCanvas></canvas>
+          </div>
+          <div class="chart-legend">
+            @for (item of complaintsLegend; track item.label) {
+              <span class="chart-legend__item">
+                <i class="chart-legend__swatch" [style.background]="item.color"></i>
+                {{ item.label }}
+              </span>
+            }
+          </div>
+          <div class="btns">
+            <button mat-stroked-button type="button" (click)="download('complaints', 'xlsx')">
+              <mat-icon>table_view</mat-icon>
+              Excel
+            </button>
+            <button mat-flat-button color="primary" type="button" (click)="download('complaints', 'pdf')">
+              <mat-icon>picture_as_pdf</mat-icon>
+              PDF
+            </button>
+          </div>
+        </div>
+      </div>
       }
-    </div>
+    }
   </div>
 </section>

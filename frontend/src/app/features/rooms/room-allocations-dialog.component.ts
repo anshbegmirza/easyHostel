@@ -5,6 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Allocation, Room, RoomsService } from './service/rooms.service';
+import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
+import { ToastService } from '../../core/toast.service';
 
 @Component({
   selector: 'app-room-allocations-dialog',
@@ -16,6 +18,8 @@ export class RoomAllocationsDialogComponent implements OnInit {
   readonly data = inject<{ room: Room }>(MAT_DIALOG_DATA);
   readonly api = inject(RoomsService);
   readonly dialogRef = inject(MatDialogRef<RoomAllocationsDialogComponent>);
+  readonly confirmDialog = inject(ConfirmDialogService);
+  readonly toast = inject(ToastService);
   readonly loading = signal(true);
   readonly allocations = signal<Allocation[]>([]);
   changed = false;
@@ -36,11 +40,24 @@ export class RoomAllocationsDialogComponent implements OnInit {
   }
 
   release(allocation: Allocation) {
-    this.api.release(allocation.id).subscribe({
-      next: () => {
-        this.changed = true;
-        this.reload();
-      },
-    });
+    this.confirmDialog
+      .open({
+        title: 'Release allocation',
+        message: `Release ${allocation.tenant_name || 'this tenant'} from ${this.data.room.code}?`,
+        confirmText: 'Release',
+        confirmColor: 'warn',
+      })
+      .subscribe((ok) => {
+        if (!ok) {
+          return;
+        }
+        this.api.release(allocation.id).subscribe({
+          next: () => {
+            this.changed = true;
+            this.toast.success('Allocation released');
+            this.reload();
+          },
+        });
+      });
   }
 }
